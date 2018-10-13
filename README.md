@@ -82,9 +82,9 @@ $ ./enc <github user> <input file> [<output file>]
 
 #### ソース
 
-- [`enc.sh` のソースを見る](https://github.com/Qithub-BOT/Qithub-ORG/blob/master/bin/enc)
+- [`enc.sh` のソースを見る](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/enc)
 - [`enc.sh` のダウンロード](https://qithub.tk/tools/crypt/?type=enc)
-- [チェックサム (SHA512)](https://github.com/Qithub-BOT/Qithub-ORG/blob/master/bin/checksum.sha512)
+- [チェックサム (SHA512)](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/checksum.sha512)
 - 詳しい説明「[GitHub の公開鍵でファイルを暗号化するスクリプト](https://qiita.com/KEINOS/items/2abce1e5b15d799ac6d7#comment-a48dd2a66e09ec9d7647)」@ Qiita
 
 ---
@@ -107,9 +107,9 @@ $ ./dec <private key> <input file> <output file>
 
 #### ソース
 
-- [`dec.sh` のソースを見る](https://github.com/Qithub-BOT/Qithub-ORG/blob/master/bin/dec)
+- [`dec.sh` のソースを見る](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/dec)
 - [`dec.sh` のダウンロード](https://qithub.tk/tools/crypt/?type=dec)
-- [チェックサム (SHA512)](https://github.com/Qithub-BOT/Qithub-ORG/blob/master/bin/checksum.sha512)
+- [チェックサム (SHA512)](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/checksum.sha512)
 
 ---
 
@@ -129,9 +129,9 @@ $ ./check <github user> <private key>
 
 #### ソース
 
-- [`check.sh` のソースを見る](https://github.com/Qithub-BOT/Qithub-ORG/blob/master/bin/check)
+- [`check.sh` のソースを見る](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/check)
 - [`check.sh` のダウンロード](https://qithub.tk/tools/crypt/?type=check)
-- [チェックサム (SHA512)](https://github.com/Qithub-BOT/Qithub-ORG/blob/master/bin/checksum.sha512)
+- [チェックサム (SHA512)](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/checksum.sha512)
 
 ---
 
