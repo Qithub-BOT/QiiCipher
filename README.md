@@ -4,7 +4,7 @@
 
 GitHub 上の公開鍵を使ってファイルを暗号化／ローカルの秘密鍵で復号・署名するシェル・スクリプトです。
 
-[![参加ポリシー](http://img.shields.io/badge/policy-Qithub%203原則-blue.svg)](https://github.com/Qithub-BOT/Qithub-ORG) ![License](https://img.shields.io/badge/license-CC%20BY--SA%204.0-brightgreen.svg) ![日本語ドキュメント](https://img.shields.io/badge/document-ja__JP-brightgreen.svg) ![日本語コミットメッセージ](https://img.shields.io/badge/Commit%20message-ja__JP-brightgreen.svg) ![日本語ソース内コメント](https://img.shields.io/badge/code%20comment-ja__JP-brightgreen.svg)
+[![参加ポリシー](http://img.shields.io/badge/policy-Qithub%203原則-blue.svg)](https://github.com/Qithub-BOT/Qithub-ORG) ![License](https://img.shields.io/badge/license-CC%20BY--SA%204.0-brightgreen.svg) ![日本語ドキュメント](https://img.shields.io/badge/document-ja-brightgreen.svg) ![日本語コミットメッセージ](https://img.shields.io/badge/Commit%20message-ja-brightgreen.svg) ![日本語ソース内コメント](https://img.shields.io/badge/code%20comment-ja-brightgreen.svg)
 
 ---
 
