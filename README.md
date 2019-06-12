@@ -2,57 +2,23 @@
 
 # QiiCipher
 
-GitHub 上の公開鍵を使ってファイルを暗号化／ローカルの秘密鍵で復号・署名するシェル・スクリプトです。
+GitHub 上の公開鍵を使ってファイルの暗号化と署名確認、ローカルの秘密鍵で復号や署名をするシェル・スクリプトです。
 
 [![参加ポリシー](http://img.shields.io/badge/policy-Qithub%203原則-blue.svg)](https://github.com/Qithub-BOT/Qithub-ORG) ![License](https://img.shields.io/badge/license-CC%20BY--SA%204.0-brightgreen.svg) ![日本語ドキュメント](https://img.shields.io/badge/document-ja-brightgreen.svg) ![日本語コミットメッセージ](https://img.shields.io/badge/Commit%20message-ja-brightgreen.svg) ![日本語ソース内コメント](https://img.shields.io/badge/code%20comment-ja-brightgreen.svg)
 
 ---
 
-## Usage（TL;DR）
+QiiCipher で使えるコマンドは以下の通りです。
 
-### 暗号化（Encrypt）
+|機能|コマンド|使用例|
+|:---|:--:|:---|
+|暗号化（Encrypt）|`enc`|`$ ./enc KEINOS himitsu.txt`|
+|復号（Decrypt）|`dec`|`$ ./dec ~/.ssh/id_rsa himitsu.txt.enc himitsu.txt`|
+|動作確認（Check）|`check`|`$ ./check KEINOS ~/.ssh/id_rsa`|
+|電子署名（Sign）|`sign`|`$ ./sign KEINOS ~/.ssh/id_rsa himitsu.txt`|
+|署名の確認（Verify）|`verify`|`$ ./verify himitsu.txt KEINOS himitsu.txt.sig`|
 
-GitHub ユーザに送る**ファイルの暗号化**の仕方。（以下は KEINOS 氏に送る場合）
-
-```shellsession
-$ ./enc KEINOS himitsu.txt
-```
-
-### 復号（Decrypt）
-
-自身の秘密鍵で、届いた**暗号ファイルの復号**の仕方。（GitHub の公開鍵とペアの秘密鍵に限る）
-
-```shellsession
-$ ./dec ~/.ssh/id_rsa himitsu.txt.enc himitsu.txt
-```
-
-### 動作確認（Check）
-
-GitHub 上の公開鍵とローカルの秘密鍵で**暗号化・復号の動作テスト**の仕方。（以下は KEINOS 氏がテストを行う場合）
-
-```shellsession
-$ ./check KEINOS ~/.ssh/id_rsa
-```
-
-### 電子署名（Sign）
-
-自身の秘密鍵で**ファイルの署名**の仕方。（GitHub の公開鍵とペアの秘密鍵に限る）
-
-```shellsession
-$ ./sign KEINOS ~/.ssh/id_rsa himitsu.txt
-```
-
-### 署名の確認（Verify）
-
-署名者の GitHub 公開鍵で署名を検証する。
-
-```shellsession
-$ ./verify himitsu.txt KEINOS himitsu.txt.sig
-```
-
----
-
-## Usage（TS;DR）
+## Usage
 
 - いずれのスクリプトも引数がない場合はヘルプが表示されます。（例：`$ ./enc`でヘルプ表示）
 - 実行前に、ダウンロードしたスクリプト・ファイルのハッシュ値（`SHA512`）と、チェックサムが同じであることを確認してください。
