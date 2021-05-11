@@ -19,7 +19,7 @@
 # ----------
 if [[ $# < 2 ]]; then
   echo
-  echo "使い方: $0 <github user> <id_rsa> <input file> [<output file>]"
+  echo "使い方: $0 <github user> <private key> <input file> [<output file>]"
   echo
   echo "- <github user> : 自分の GitHub アカウント名"
   echo "- <private key> : GitHub で公開している公開鍵のペアとなる秘密鍵のパス"
