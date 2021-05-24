@@ -4,7 +4,7 @@ if [[ $# < 2 ]]; then
   echo
   echo "使い方: $0 <email> <keyname>"
   echo
-  echo "- <email> : Githubで使用しているメールアドレス"
+  echo "- <email> : Githubで使用しているメールアドレス(公開鍵内に埋め込まれます)"
   echo "- <keyname>  : 希望するキーペアの名前(パス名ではない)"
   echo
   exit 1
