@@ -30,6 +30,13 @@ if [[ $# < 2 ]]; then
   exit 1
 fi
 
+md5s() {
+  if [ -e md5sum ] ; then
+    echo $1 | md5sum
+  elif [ -e md5 ] ; then
+    md5 -q -s $1
+  fi
+}
 
 # コマンド引数取得
 # ----------------
@@ -54,7 +61,7 @@ trap "rm -rf /tmp/$USERNAME.*" 0
 
 # 一時ファイル
 # ------------
-TMP=`md5 -q -s $RANDOM`
+TMP=`md5s $RANDOM`
 PATHPUBKEY=/tmp/$USERNAME.$TMP.pub
 
 # RSA 公開鍵の取得
