@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+# キーペアの生成スクリプト (UTF-8)
+# ======================================
+#
+# Githubが対応するRSAキーペアを作成します。キー長は4096bitです。
+#
+# - 使い方の例：
+#   以下のコマンドでキーペアを作成します。
+#       $ ./keygen.sh keinos@example.com githubkeypair
+#   この場合、~/.ssh/ディレクトリに秘密鍵githubkeypairと公開鍵githubkeypair.pubが生成されます。
+#
+# - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
+#
+
+# ヘルプ表示
+# ----------
+if [[ $# < 2 ]]; then
+  echo
+  echo "使い方: $0 <email> <keyname>"
+  echo
+  echo "- <email> : Githubで使用しているメールアドレス(公開鍵内に埋め込まれます)"
+  echo "- <keyname>  : 希望するキーペアの名前(パス名ではない)"
+  echo
+  exit 1
+fi
+
+if [ ! -d ~/.ssh ] ;  then
+  mkdir ~/.ssh
+  chmod 700 ~/.ssh
+fi
+
+ssh-keygen -t rsa -b 4096 -m PEM -C $1 -f ~/.ssh/$2
+
+echo
+echo "This is the generated pubkey. Register it on your github account. Then try the 'check' command for error check."
+echo
+cat ~/.ssh/$2.pub
