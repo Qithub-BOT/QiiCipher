@@ -109,9 +109,10 @@ $ ./check <github user> <private key>
 #### 構文
 
 ```shellsession
-$ ./sign <private key> <input file> [<output file>]
+$ ./sign <github user> <private key> <input file> [<output file>]
 ```
 
+- `<github user>`：自分の GitHub アカウント名。（`@KEINOS@GitHub` の場合は `KEINOS`）
 - `<private key>`：秘密鍵のパス。署名に使われます。GitHub の公開鍵とペアの秘密鍵である必要があります。
 - `<input file>`：署名したいファイルのパス。
 
