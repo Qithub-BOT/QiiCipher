@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+if [[ $# < 2 ]]; then
+  echo
+  echo "使い方: $0 <email> <keyname>"
+  echo
+  echo "- <email> : Githubで使用しているメールアドレス"
+  echo "- <keyname>  : 希望するキーペアの名前(パス名ではない)"
+  echo
+  exit 1
+fi
+
+if [ ! -d ~/.ssh ] ;  then
+  mkdir ~/.ssh
+  chmod 700 ~/.ssh
+fi
+
+ssh-keygen -t rsa -b 4096 -m PEM -C $1 -f ~/.ssh/$2
+
+echo
+echo "This is the generated pubkey. Register it on your github account. Then try the 'check' command for error check."
+echo
+cat ~/.ssh/$2.pub
