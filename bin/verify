@@ -30,6 +30,13 @@ if [[ $# < 2 ]]; then
   exit 1
 fi
 
+md5s() {
+  if [ -e md5sum ] ; then
+    echo $1 | md5sum
+  elif [ -e md5 ] ; then
+    md5 -q -s $1
+  fi
+}
 
 # コマンド引数取得
 # ----------------
@@ -50,7 +57,7 @@ fi
 # - 参考URL ：
 #     https://qiita.com/m-yamashita/items/889c116b92dc0bf4ea7d
 #     https://qiita.com/bsdhack/items/47c9cbb5fd22fcc9597a
-TMPDIR=${TMP:-/tmp}/`basename ${0}`-`md5 -q -s ${RANDOM}`
+TMPDIR=${TMP:-/tmp}/`basename ${0}`-`md5s ${RANDOM}`
 mkdir -p ${TMPDIR}
 trap 'rm -r ${TMPDIR}' 0
 

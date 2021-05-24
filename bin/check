@@ -17,6 +17,14 @@
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
 
+md5r() {
+  if [ -e md5sum ] ; then
+    echo $RANDOM | md5sum
+  elif [ -e md5 ] ; then
+    md5 -q -s $RANDOM
+  fi
+}
+
 # ヘルプ表示
 # ----------
 if [[ $# < 2 ]]; then
@@ -45,12 +53,12 @@ trap "rm -rf ./sample.*" 0
 
 # サンプル・テキストの作成
 # ------------------------
-SAMPLETEXT=`md5 -q -s $RANDOM`
+SAMPLETEXT=`md5r`
 SAMPLETEXT='hoge'
 
 # サンプル・ファイル名設定
 # ------------------------
-FILENAME=`md5 -q -s $RANDOM`
+FILENAME=`md5r`
 PATHFILE="./sample.${FILENAME}.txt"
 
 
