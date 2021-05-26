@@ -9,7 +9,7 @@
 PATH_DIR_REPO="$(dirname "$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)")"
 PATH_DIR_BIN="${PATH_DIR_REPO}/bin"
 PATH_DIR_RETURN="$(cd . && pwd)"
-#SUCCESS=0
+SUCCESS=0
 FAILURE=1
 
 # 拡張子のないスクリプトファイル一覧（テスト対象リスト）
@@ -59,14 +59,23 @@ runShfmtForShExt() {
 }
 
 runShfmtForNoExt() {
+    result=$SUCCESS
+
     # shellcheck disable=SC2086
     set -- $LIST_SCRIPT_NO_EXT
-    while [ -n "$1" ]; do
+
+    while [ ! "$1" ]; do
         path_file_target="${PATH_DIR_BIN}/${1}"
-        echo "File: ${path_file_target}"
-        shfmt -d "$path_file_target"
+
+        shfmt -d "$path_file_target" || {
+            echo "File: ${path_file_target}"
+            result=$FAILURE
+        }
+
         shift
     done
+
+    return $result
 }
 
 runShellCheck() {
@@ -76,16 +85,17 @@ runShellCheck() {
 }
 
 runShellCheckShExt() {
-    find . -name '*.sh' -type f -print0 | xargs -0 shellcheck  --external-sources
+    find . -name '*.sh' -type f -print0 | xargs -0 shellcheck --external-sources
 }
 
 runShellCheckForNoExt() {
     # shellcheck disable=SC2086
     set -- $LIST_SCRIPT_NO_EXT
-    while [ -n "$1" ]; do
+    while [ ! "${1:+none}" ]; do
         path_file_target="${PATH_DIR_BIN}/${1}"
-        echo "File: ${path_file_target}"
+
         shellcheck --external-sources "$path_file_target"
+
         shift
     done
 }
@@ -93,7 +103,6 @@ runShellCheckForNoExt() {
 # -----------------------------------------------------------------------------
 #  Main
 # -----------------------------------------------------------------------------
-# Do not allow undecleared variables and function failure.
 set -eu
 
 cd "$PATH_DIR_REPO" || {
