@@ -6,12 +6,9 @@
 #
 # OpenSSL の AES-256-CBC と「共通鍵」を使ってファイルを暗号化します。
 #
-# GitHub 上で公開されている（https://github.com/<user name>.keys で取得できる）
-# 自身の RSA 公開鍵とペアの秘密鍵である必要があります。
-#
 # - 使い方の例：
-#   以下のコマンドで署名ファイル `myfile.txt.sig` が作成されます。
-#       $ ./sign ~/.ssh/id_rsa myfile.txt
+#   以下のコマンドで圧縮＆暗号化済みファイル `myfile.txt.tar.gz.aes` が作成されます。
+#       $ ./archive myfile.txt
 #
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
@@ -44,7 +41,7 @@ if [[ $# -lt 1 ]]; then
     echo
     echo "[オプション]"
     echo "- <output file> : 圧縮＆暗号化済みファイルの出力先のパス"
-    echo "                  指定がない場合は <input_file>.gz.aes として出力されます。"
+    echo "                  指定がない場合は <input_file>.tar.gz.aes として出力されます。"
     echo
     exit 1
 fi
@@ -67,7 +64,7 @@ echo -n "- アーカイブ用ディレクトリを作成しています ... "
 TEMPDIR="./${INPUTFILE}-archive/"
 
 if ! mkdir -p "$TEMPDIR"; then
-    echo "NG：ディレクトリをできませんでした。"
+    echo "NG：ディレクトリを作成できませんでした。"
     echo "- 書き込み権限などを確認してください。"
     exit 1
 fi
@@ -79,7 +76,10 @@ echo -n "- 共通鍵を作成しています ... "
 
 PASSWORD=$(md5s $RANDOM)
 
-if ! (echo "$PASSWORD" >"${TEMPDIR}${OUTPUTFILE}.passwd"); then
+if ! (
+    umask 077
+    echo "$PASSWORD" >"${TEMPDIR}${OUTPUTFILE}.passwd"
+); then
     echo "NG：ファイルを作成できませんでした。"
     echo "書き込み権限などを確認してください。"
     exit 1
@@ -109,7 +109,7 @@ echo
 # ----------------
 echo -n "- 共通鍵を読み込んでいます ... "
 
-if PASSWORD=$(cat "${TEMPDIR}${OUTPUTFILE}.passwd"); then
+if ! PASSWORD=$(cat "${TEMPDIR}${OUTPUTFILE}.passwd"); then
     echo "NG：共通鍵を読み込めませんでした。"
     exit 1
 fi
