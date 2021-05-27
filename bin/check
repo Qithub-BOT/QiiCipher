@@ -112,7 +112,7 @@ echo "OK"
 # ----------------------
 echo -n "サンプル・ファイルの削除中 ... "
 
-if ! ( rm "$PATHFILE" && rm "${PATHFILE}.enc" ); then
+if ! (rm "$PATHFILE" && rm "${PATHFILE}.enc"); then
     echo "NG：一時ファイルの削除に失敗しました。 手動で削除してください。"
     echo "ファイル名： ${PATHFILE}"
     exit 1
