@@ -76,7 +76,10 @@ echo -n "- 共通鍵を作成しています ... "
 
 PASSWORD=$(md5s $RANDOM)
 
-if ! (umask 077 ; echo "$PASSWORD" >"${TEMPDIR}${OUTPUTFILE}.passwd"); then
+if ! (
+    umask 077
+    echo "$PASSWORD" >"${TEMPDIR}${OUTPUTFILE}.passwd"
+); then
     echo "NG：ファイルを作成できませんでした。"
     echo "書き込み権限などを確認してください。"
     exit 1
