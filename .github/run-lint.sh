@@ -54,21 +54,23 @@ runShfmt() {
     runShfmtForShExt && runShfmtForNoExt && echo 'OK'
 }
 
+# 拡張子 .sh ありのスクリプトの shfmt
 runShfmtForShExt() {
     find . -name '*.sh' -type f -print0 | xargs -0 shfmt -d
 }
 
+# 拡張子 .sh なしのスクリプトの shfmt
 runShfmtForNoExt() {
     result=$SUCCESS
 
     # shellcheck disable=SC2086
     set -- $LIST_SCRIPT_NO_EXT
 
-    while [ ! "$1" ]; do
+    while [ "${1:+none}" ]; do
         path_file_target="${PATH_DIR_BIN}/${1}"
 
         shfmt -d "$path_file_target" || {
-            echo "File: ${path_file_target}"
+            echo >&2 "shfmt fail: ${path_file_target}"
             result=$FAILURE
         }
 
@@ -84,20 +86,30 @@ runShellCheck() {
     runShellCheckShExt && runShellCheckForNoExt && echo 'OK'
 }
 
+# 拡張子 .sh ありのスクリプトの shellcheck
 runShellCheckShExt() {
     find . -name '*.sh' -type f -print0 | xargs -0 shellcheck --external-sources
 }
 
+# 拡張子 .sh なしのスクリプトの shellcheck
 runShellCheckForNoExt() {
+    result=$SUCCESS
+
     # shellcheck disable=SC2086
     set -- $LIST_SCRIPT_NO_EXT
-    while [ ! "${1:+none}" ]; do
+
+    while [ "${1:+none}" ]; do
         path_file_target="${PATH_DIR_BIN}/${1}"
 
-        shellcheck --external-sources "$path_file_target"
+        shellcheck --external-sources "$path_file_target" || {
+            echo >&2 "shellcheck fail: ${path_file_target}"
+            result=$FAILURE
+        }
 
         shift
     done
+
+    return $result
 }
 
 # -----------------------------------------------------------------------------
