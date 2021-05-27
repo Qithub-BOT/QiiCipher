@@ -15,16 +15,7 @@ jobs:
         with:
           go-version: 1.15.x
 
-      - name: Use Cache for Go
-        uses: actions/cache@v2
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-
       - name: Install latest shfmt
-        if: steps.cache.outputs.cache-hit != 'true'
         run: GO111MODULE=on go get mvdan.cc/sh/v3/cmd/shfmt
 
       - name: Run shfmt and shellcheck
