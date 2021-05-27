@@ -1,0 +1,34 @@
+# -----------------------------------------------------------------------------
+#  editorconfig 互換用設定ファイル
+# -----------------------------------------------------------------------------
+
+root = true
+
+# Default/Common settings
+[*]
+indent_style = space
+indent_size = 4
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Shell-format
+[*.sh]
+indent_style       = space  # shfmt -i=4
+indent_size        = 4      # shfmt -i=4
+shell_variant      = posix  # shfmt -ln=posix
+binary_next_line   = true   # shfmt -bn
+switch_case_indent = true   # shfmt -ci
+space_redirects    = false  # shfmt -sr
+keep_padding       = true   # shfmt -kp
+function_next_line = false  # disable shfmt -fn
+
+[*.json]
+indent_size = 4
+quote_type = single
+
+
+[*.{yml,yaml}]
+indent_size = 2
+quote_type = single
