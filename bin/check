@@ -61,7 +61,7 @@ PATHFILE="./sample.${FILENAME}.txt"
 # ------------------------
 echo -n "サンプル・ファイルを作成しています ... "
 
-if ! echo $SAMPLETEXT >"$PATHFILE"; then
+if ! echo "$SAMPLETEXT" >"$PATHFILE"; then
     echo "NG：サンプル・ファイルの作成に失敗しました。"
     echo "サンプル・ファイル名： ${PATHFILE}"
     exit 1
