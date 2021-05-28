@@ -148,7 +148,8 @@ $ ./verify <verify file> <github user> [<sign file>]
 ## 注意
 
 - これらのスクリプトは [1 ブロックぶんの暗号化](https://qiita.com/kunichiko/items/3c0b1a2915e9dacbd4c1)しか行わないため**軽量のファイル向け**です。パスワードやハッシュ値といった軽量ファイル向けです。
-- 各スクリプトはダウンロード後、（0744などの）実行権限が必要です。
+- 各スクリプトはダウンロード後、（0755などの）実行権限が必要です。
+- 使用する秘密鍵は OpenSSH 形式ではなく PEM 形式である必要があります。参考 [OpenSSH 形式の秘密鍵について](OPENSSH_PRIVATE_KEY.md)
 
 ## 動作検証済み環境
 
@@ -158,6 +159,11 @@ $ ./verify <verify file> <github user> [<sign file>]
     - `$ ssh -V` : `OpenSSH_7.6p1, LibreSSL 2.6.2`
     - `$ bash --version` : `GNU bash, version 3.2.57(1)-release (x86_64-apple-darwin17)`
 
+2. Linux Ubuntu
+    - `Ubuntu 20.04.2 LTS`（2021/05/28）
+    - `$ openssl version` : `OpenSSL 1.1.1f  31 Mar 2020`
+    - `$ ssh -V` : `OpenSSH_8.2p1 Ubuntu-4ubuntu0.2, OpenSSL 1.1.1f  31 Mar 2020`
+    - `$ bash --version` : `GNU bash, version 5.0.17(1)-release (x86_64-pc-linux-gnu)`
 ---
 
 ## メンテナ
