@@ -51,7 +51,6 @@ trap "rm -rf ./sample.*" 0
 # サンプル・テキストの作成
 # ------------------------
 SAMPLETEXT=$(md5r)
-SAMPLETEXT='hoge'
 
 # サンプル・ファイル名設定
 # ------------------------
@@ -62,7 +61,7 @@ PATHFILE="./sample.${FILENAME}.txt"
 # ------------------------
 echo -n "サンプル・ファイルを作成しています ... "
 
-if ! echo $SAMPLETEXT >"$PATHFILE"; then
+if ! echo "$SAMPLETEXT" >"$PATHFILE"; then
     echo "NG：サンプル・ファイルの作成に失敗しました。"
     echo "サンプル・ファイル名： ${PATHFILE}"
     exit 1
