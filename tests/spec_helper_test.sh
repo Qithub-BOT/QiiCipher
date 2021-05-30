@@ -14,10 +14,12 @@ Describe 'Global Variable'
         The value "$PATH_DIR_REPO" should be defined
         The path "$PATH_DIR_REPO" should be exist
     End
+
     It 'check PATH_DIR_BIN is defined and a valid path'
         The value "$PATH_DIR_BIN" should be defined
         The path "$PATH_DIR_BIN" should be exist
     End
+
     It 'check PATH_DIR_TEST is defined and a valid path'
         The value "$PATH_DIR_TEST" should be defined
         The path "$PATH_DIR_TEST" should be exist
