@@ -17,6 +17,8 @@
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
 
+PATH_DIR_BIN="$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)"
+
 md5r() {
     if [ -e md5sum ]; then
         echo $RANDOM | md5sum
@@ -72,7 +74,7 @@ echo "OK"
 # --------------------------
 echo -n "サンプル・ファイルを暗号化しています ... "
 
-if ! RESULT=$(enc "$USERNAME" "$PATHFILE" 2>&1); then
+if ! RESULT=$("$PATH_DIR_BIN"/enc "$USERNAME" "$PATHFILE" 2>&1); then
     echo "NG：サンプル・ファイルの暗号化に失敗しました。"
     echo "スクリプトの実行権限、ディレクトリの書き込み権限などを確認ください。"
     exit 1
@@ -83,7 +85,7 @@ echo "OK"
 # ------------------------
 echo -n "暗号ファイルを復号しています ... "
 
-if ! RESULT=$(dec "$SECRETKEY" "${PATHFILE}.enc" "${PATHFILE}.dec" 2>&1); then
+if ! RESULT=$("$PATH_DIR_BIN"/dec "$SECRETKEY" "${PATHFILE}.enc" "${PATHFILE}.dec" 2>&1); then
     echo "NG：暗号ファイルの復号中にエラーが発生しました。"
     echo "スクリプトの実行権限、ディレクトリの書き込み権限などを確認ください。"
     echo "Error: ${RESULT}"
