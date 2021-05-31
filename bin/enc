@@ -95,7 +95,7 @@ PATHPUBKEY="/tmp/${USERNAME}.${TMP}.pub"
 echo -n "${USERNAME} の GitHub 上の公開鍵を取得中 ... "
 
 if ! curl -s "https://github.com/${USERNAME}.keys" | head -n 1 >"$PATHPUBKEY"; then
-    echo "NG：公開鍵を取得・保存できませんでした。"
+    echo >&2 "NG：公開鍵を取得・保存できませんでした。"
     exit 1
 fi
 echo "OK"
@@ -105,7 +105,7 @@ echo "OK"
 echo -n "取得した公開鍵のアクセス権を変更中 (0644 -> 0600) ... "
 
 if ! chmod 0600 "$PATHPUBKEY"; then
-    echo "NG：ファイルのアクセス権を変更できませんでした。"
+    echo >&2 "NG：ファイルのアクセス権を変更できませんでした。"
     exit 1
 fi
 echo "OK"
@@ -118,7 +118,7 @@ echo "OK"
 echo -n "RSA 形式の公開鍵を PKCS8 形式に変換中 ... "
 
 if ! ssh-keygen -f "$PATHPUBKEY" -e -m pkcs8 >"${PATHPUBKEY}.pkcs8"; then
-    echo "NG：RSA -> PKCS8 変換中にエラーが発生しました。"
+    echo >&2 "NG：RSA -> PKCS8 変換中にエラーが発生しました。"
     exit 1
 fi
 echo "OK"
@@ -142,7 +142,7 @@ if ! openssl rsautl \
     -inkey "${PATHPUBKEY}.pkcs8" \
     -in "$INPUTFILE" \
     -out "$OUTPUTFILE"; then
-    echo "NG：暗号化に失敗しました。ファイルのサイズなど、エラー内容を確認ください。"
+    echo >&2 "NG：暗号化に失敗しました。ファイルのサイズなど、エラー内容を確認ください。"
     exit 1
 fi
 echo "OK"
@@ -152,7 +152,7 @@ echo "OK"
 echo -n "一時ファイルの削除中 ... "
 
 if ! (rm "$PATHPUBKEY" && rm "${PATHPUBKEY}.pkcs8"); then
-    echo "NG：一時ファイルの削除に失敗しました。 '/tmp/' ディレクトリ内を手動で削除してください。"
+    echo >&2 "NG：一時ファイルの削除に失敗しました。 '/tmp/' ディレクトリ内を手動で削除してください。"
     exit 1
 fi
 echo "OK"
