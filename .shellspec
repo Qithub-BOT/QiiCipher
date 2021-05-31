@@ -1,0 +1,10 @@
+# =============================================================================
+#  ShellSpec Configuration
+# =============================================================================
+#  Default command options/flags of `shellspec`.
+#  See: `shellspec --help`
+
+--default-path "tests"
+--helperdir "./tests"
+--pattern "**/*_test.sh"
+--require spec_helper
