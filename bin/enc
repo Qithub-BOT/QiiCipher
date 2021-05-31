@@ -100,6 +100,16 @@ if ! curl -s "https://github.com/${USERNAME}.keys" | head -n 1 >"$PATHPUBKEY"; t
 fi
 echo "OK"
 
+# 公開鍵のアクセス権変更
+# ------------------
+echo -n "取得した公開鍵のアクセス権を変更中 (0644 -> 0600) ... "
+
+if ! chmod 0600 "$PATHPUBKEY"; then
+    echo "NG：ファイルのアクセス権を変更できませんでした。"
+    exit 1
+fi
+echo "OK"
+
 # 公開鍵のフォーマット変換
 # ------------------------
 # - 参考URL ：
