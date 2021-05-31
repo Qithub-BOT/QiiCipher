@@ -2,11 +2,18 @@
 
 # md5s は md5sum/md5 のラッパー関数です.
 md5s() {
-    if [ -e md5sum ]; then
-        echo "$1" | md5sum
-    elif [ -e md5 ]; then
-        md5 -q -s "$1"
+    if [ -e "$(which md5sum)" ]; then
+        echo "$1" | md5sum | awk '{ print $1 }'
+        return $?
     fi
+
+    if [ -e "$(which md5)" ]; then
+        md5 -q -s "$1"
+        return $?
+    fi
+
+    echo >&2 'MD5 ハッシュ関数がありません。'
+    exit 1
 }
 
 Describe 'md5s'
