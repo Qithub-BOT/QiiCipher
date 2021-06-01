@@ -1,0 +1,19 @@
+name: shellspec
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  unit_test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+
+      - name: Install latest shellspec
+        run: wget -O- https://git.io/shellspec | sh -s -- --yes
+
+      - name: Run shellspec
+        run: |
+          ./.github/run-test.sh
