@@ -26,9 +26,9 @@ if [[ $# -lt 1 ]]; then
 fi
 
 md5s() {
-    if [ -e md5sum ]; then
-        echo "$1" | md5sum
-    elif [ -e md5 ]; then
+    if [ -e "$(which md5sum)" ]; then
+        echo "$1" | md5sum | awk '{ print $1 }'
+    elif [ -e "$(which md5)" ]; then
         md5 -q -s "$1"
     fi
 }
