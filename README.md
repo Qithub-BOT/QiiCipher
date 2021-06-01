@@ -159,6 +159,12 @@ $ ./checkkeylength <github user>
 
 - `<github user>`：鍵長確認の対象 GitHub アカウント名
 
+#### ソース
+
+- [`checkkeylength.sh` のソースを見る](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/checkkeylength)
+- [`checkkeylength.sh` のダウンロード](https://qithub-bot.github.io/QiiCipher/bin/checkkeylength)
+- [チェックサム (SHA512)](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/checksum.sha512)
+
 ---
 
 ## 注意
