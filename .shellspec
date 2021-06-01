@@ -8,3 +8,4 @@
 --helperdir "./tests"
 --pattern "**/*_test.sh"
 --require spec_helper
+--shell bash
