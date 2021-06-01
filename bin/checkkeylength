@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+
+# SSHキー(RSA)の鍵長をチェックします。
+# ======================================
+#
+# GitHub 上で公開されている（https://github.com/<user name>.keys で取得できる）
+# 相手の RSA 公開鍵の鍵長を調べます。
+# 2021年現在、1024bit以下の鍵長は安全性に懸念が生じています。
+# 最低でも2048bit、できれば4096bit以上を推奨します。
+#
+# - 使い方の例：
+#       $ ./checkkeylength.sh KEINOS
+#
+# - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
+#
+
+# ヘルプ表示
+# ----------
+if [[ $# -lt 1 ]]; then
+    echo
+    echo "使い方: $0 <github user>"
+    echo
+    echo "- <github user> : 相手の GitHub アカウント名"
+    echo
+    exit 1
+fi
+
+md5s() {
+    if [ -e md5sum ]; then
+        echo "$1" | md5sum
+    elif [ -e md5 ]; then
+        md5 -q -s "$1"
+    fi
+}
+
+# コマンド引数取得
+# ----------------
+USERNAME=$1
+
+# trap の設定
+# -----------
+# スクリプト終了後一時ファイルを削除します。
+# - 参考URL ： https://qiita.com/m-yamashita/items/889c116b92dc0bf4ea7d
+trap 'rm -rf /tmp/${USERNAME}.*' 0
+
+# 一時ファイル
+# ------------
+TMP=$(md5s $RANDOM)
+PATHPUBKEY="/tmp/${USERNAME}.${TMP}.pub"
+
+# RSA 公開鍵の取得
+# ----------------
+# ユーザの GitHub の公開鍵一覧の１行目を取得
+# - 取得先は： https://github.com/<user name>.keys
+# - 参考URL ： https://qiita.com/m0r1/items/af16c41475d493ab6774
+echo -n "${USERNAME} の GitHub 上の公開鍵を取得中 ... "
+
+if ! curl -s "https://github.com/${USERNAME}.keys" | head -n 1 >"$PATHPUBKEY"; then
+    echo "NG：公開鍵を取得・保存できませんでした。"
+    exit 1
+fi
+echo "OK"
+
+# RSA公開鍵の鍵長を表示
+# ------------------------
+# - 参考URL ：
+#   - https://qiita.com/ledmonster/items/b57d48981ad7a9d41042
+
+echo "以下に${USERNAME}の鍵長情報を表示します。"
+echo
+ssh-keygen -l -f "$PATHPUBKEY"
+echo
+
+echo "上記の鍵長を確認してください。RSAキーでは行頭の数字（鍵長）が1024以下のものは危険です。"
+echo "2048bit以上（できれば4096bit以上）のRSAキーへの作り直しを推奨します。keygenコマンドをご利用ください。"
