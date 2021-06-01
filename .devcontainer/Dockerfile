@@ -8,3 +8,7 @@ RUN apk update \
      && apk add --no-cache \
         shellcheck \
         shfmt
+
+USER vscode
+
+RUN sh -c 'wget -O- https://git.io/shellspec | sh -s -- --yes'
