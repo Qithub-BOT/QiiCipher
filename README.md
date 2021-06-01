@@ -12,6 +12,7 @@ QiiCipher で使えるコマンドは以下の通りです。
 
 |機能|コマンド|使用例|
 |:---|:--:|:---|
+|鍵生成（Key Generate）|`keygen`|`$ ./keygen KEINOS@example.com MyKeyName`|
 |暗号化（Encrypt）|`enc`|`$ ./enc KEINOS himitsu.txt`|
 |アーカイブ＆暗号化（Archive）|`archive`|[WIP](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/archive)|
 |復号（Decrypt）|`dec`|`$ ./dec ~/.ssh/id_rsa himitsu.txt.enc himitsu.txt`|
@@ -27,6 +28,29 @@ QiiCipher で使えるコマンドは以下の通りです。
 - ダウンロードしたスクリプト・ファイルを別名保存した場合は、各構文内のスクリプト名も置き換えてください。（`enc.sh`としてダウンロードした場合 `$ ./enc` -> `$ ./enc.sh`）
 - 動作確認済み OS と環境はページ下部に記載しています。
 
+### 鍵生成スクリプト（`keygen.sh`）
+
+このシェル・スクリプトは RSA鍵のキーペアを生成します。鍵長は安全のため4096bitに設定されています。
+キーペアは ~/.ssh/ に保存されます。
+
+#### 構文
+
+```shellsession
+$ ./keygen <email> <key name>
+```
+
+##### 引数
+
+- `<email>`：Githubで使用しているメールアドレス(公開鍵内に埋め込まれます)
+- `<key name>` ：希望するキーペアの名前(パス名ではない)
+
+#### ソース
+
+- [`keygen.sh` のソースを見る](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/keygen)
+- [`keygen.sh` のダウンロード](https://qithub-bot.github.io/QiiCipher/bin/keygen)
+- [チェックサム (SHA512)](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/checksum.sha512)
+
+---
 
 ### 暗号化スクリプト（`enc.sh`）
 
