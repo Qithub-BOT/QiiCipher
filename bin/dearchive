@@ -7,7 +7,7 @@
 # OpenSSL の AES-256-CBC と「共通鍵」を使って暗号化されたファイルを復号します。
 #
 # - 使い方の例：
-#   以下のコマンドで圧縮＆暗号化済みファイル `myfile.txt.tar.gz.aes` が作成されます。
+#   以下のコマンドで復号＆解凍済みファイル `myfile` が作成されます。
 #   （password.passwdはパスワードが書かれたテキストファイルです）
 #       $ ./dearchive myfile.tar.gz.aes myfile password.passwd
 #
