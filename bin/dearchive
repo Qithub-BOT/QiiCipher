@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+# AES SHA256 CBC 復号スクリプト (UTF-8)
+# =======================================
+#
+#
+# OpenSSL の AES-256-CBC と「共通鍵」を使って暗号化されたファイルを復号します。
+#
+# - 使い方の例：
+#   以下のコマンドで圧縮＆暗号化済みファイル `myfile.txt.tar.gz.aes` が作成されます。
+#       $ ./dearchive myfile.txt
+#
+# - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
+#
+
+# ヘルプ表示
+# ----------
+if [[ $# -lt 3 ]]; then
+    echo
+    echo "ファイルを複合して解凍します。（AES-256-CBC暗号）"
+    echo
+    echo "使い方: $0 <input file> <output file> <password file> [<private key>]"
+    echo
+    echo "- <input file>  : 復号＆解凍したいファイルのパス"
+    echo "- <output file> : 復号＆解凍済みファイルの出力先のパス"
+    echo "- <password file> : パスワードが記載されたファイル。"
+    echo "                    オプションの<private key>が指定されている場合は"
+    echo "                    パスワードがencスクリプトによって暗号化されているとみなします。"
+    echo
+    echo "[オプション]"
+    echo "- <private key> : encスクリプトで暗号化されたパスワードを復号するための秘密鍵。"
+    echo
+    exit 1
+fi
+
+# コマンド引数取得
+# ----------------
+INPUTFILE=$1
+OUTPUTFILE=$2
+PASSWORDFILE=$3
+PRIVATEKEYFILE=$4
+
+# trap の設定
+# -----------
+# スクリプト終了後一時ファイルを削除します。
+# - 参考URL ： https://qiita.com/m-yamashita/items/889c116b92dc0bf4ea7d
+trap 'rm -rf /tmp/QiiCipher_${OUTPUTFILENAME}.tar.gz' 0
+
+# ファイルの復号テスト
+# --------------------
+echo -n "- 共通鍵でファイルを復号しています ... "
+
+OUTPUTFILENAME=`basename ${OUTPUTFILE}`
+TEMPFILE="/tmp/QiiCipher_${OUTPUTFILENAME}.tar.gz"
+
+if ! openssl enc \
+    -d -aes-256-cbc \
+    -salt \
+    -k `cat ${PASSWORDFILE}` \
+    -in "${INPUTFILE}" \
+    -out "${TEMPFILE}"; then
+    echo "NG：ファイルを復号できませんでした。"
+    exit 1
+fi
+
+tar -xf "$TEMPFILE" -C `dirname ${OUTPUTFILE}`
+
+echo "OK"
