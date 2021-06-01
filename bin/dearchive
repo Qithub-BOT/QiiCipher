@@ -8,7 +8,13 @@
 #
 # - 使い方の例：
 #   以下のコマンドで圧縮＆暗号化済みファイル `myfile.txt.tar.gz.aes` が作成されます。
-#       $ ./dearchive myfile.txt
+#   （password.passwdはパスワードが書かれたテキストファイルです）
+#       $ ./dearchive myfile.tar.gz.aes myfile password.passwd
+#
+#   ４つ目の引数として秘密鍵を指定すると、３つ目の引数で渡したパスワードファイルがencスクリプトで暗号化
+#   されているとみなし、秘密鍵で復号してからパスワードとして利用します。
+#   （password.passwd.encはencスクリプトで暗号化済みのパスワードが記録されたバイナリファイルです）
+#       $ ./dearchive myfile.tar.gz.aes myfile password.passwd.enc ~/.ssh/github_key
 #
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
@@ -17,7 +23,7 @@
 # ----------
 if [[ $# -lt 3 ]]; then
     echo
-    echo "ファイルを複合して解凍します。（AES-256-CBC暗号）"
+    echo "ファイルを復号して解凍します。（AES-256-CBC暗号）"
     echo
     echo "使い方: $0 <input file> <output file> <password file> [<private key>]"
     echo
@@ -33,6 +39,14 @@ if [[ $# -lt 3 ]]; then
     exit 1
 fi
 
+md5s() {
+    if [ -e "$(which md5sum)" ]; then
+        echo "$1" | md5sum | awk '{ print $1 }'
+    elif [ -e "$(which md5)" ]; then
+        md5 -q -s "$1"
+    fi
+}
+
 # コマンド引数取得
 # ----------------
 INPUTFILE=$1
@@ -40,23 +54,37 @@ OUTPUTFILE=$2
 PASSWORDFILE=$3
 PRIVATEKEYFILE=$4
 
+# 一時ファイル
+# ------------
+TMP=$(md5s $RANDOM)
+OUTPUTFILENAME=`basename ${OUTPUTFILE}`
+TEMPFILE="/tmp/QiiCipher_${TMP}.${OUTPUTFILENAME}.tar.gz"
+DECRYPTED_PASSWORDFILE="/tmp/QiiCipher_${TMP}.passwd"
+
 # trap の設定
 # -----------
 # スクリプト終了後一時ファイルを削除します。
 # - 参考URL ： https://qiita.com/m-yamashita/items/889c116b92dc0bf4ea7d
-trap 'rm -rf /tmp/QiiCipher_${OUTPUTFILENAME}.tar.gz' 0
+trap "rm -rf /tmp/QiiCipher_${TMP}.*" 0
+
+
+# 秘密鍵が指定されていたら共通鍵が暗号化されているとみなし復号する
+# --------------------
+if [ -n "$PRIVATEKEYFILE" ]; then
+    dec $PRIVATEKEYFILE $PASSWORDFILE $DECRYPTED_PASSWORDFILE
+    PASSWORD=`cat ${DECRYPTED_PASSWORDFILE}`
+else
+    PASSWORD=`cat ${PASSWORDFILE}`
+fi
 
 # ファイルの復号テスト
 # --------------------
 echo -n "- 共通鍵でファイルを復号しています ... "
 
-OUTPUTFILENAME=`basename ${OUTPUTFILE}`
-TEMPFILE="/tmp/QiiCipher_${OUTPUTFILENAME}.tar.gz"
-
 if ! openssl enc \
     -d -aes-256-cbc \
     -salt \
-    -k `cat ${PASSWORDFILE}` \
+    -k $PASSWORD \
     -in "${INPUTFILE}" \
     -out "${TEMPFILE}"; then
     echo "NG：ファイルを復号できませんでした。"
