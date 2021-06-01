@@ -19,6 +19,7 @@ QiiCipher で使えるコマンドは以下の通りです。
 |動作確認（Check）|`check`|`$ ./check KEINOS ~/.ssh/id_rsa`|
 |電子署名（Sign）|`sign`|`$ ./sign KEINOS ~/.ssh/id_rsa himitsu.txt`|
 |署名の確認（Verify）|`verify`|`$ ./verify himitsu.txt KEINOS himitsu.txt.sig`|
+|鍵長の確認（Check Key Length）|`checkkeylength`|`$ ./checkkeylength KEINOS`|
 
 ## Usage
 
@@ -166,6 +167,27 @@ $ ./verify <verify file> <github user> [<sign file>]
 ##### オプション
 
 - `<sign file>`：署名されたファイルのパス。指定されていない場合は、同階層にある `<verify file>.sig` （`.sig` 拡張子を追加したファイル）が使用されます。
+
+---
+
+### 鍵長の検証スクリプト
+
+このシェル・スクリプトは、RSA鍵の鍵長を表示します。
+また、1024bit以下の短い鍵長に対する危険性について注意喚起し、推奨される対応についても表示します。
+
+#### 構文
+
+```shellsession
+$ ./checkkeylength <github user>
+```
+
+- `<github user>`：鍵長確認の対象 GitHub アカウント名
+
+#### ソース
+
+- [`checkkeylength.sh` のソースを見る](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/checkkeylength)
+- [`checkkeylength.sh` のダウンロード](https://qithub-bot.github.io/QiiCipher/bin/checkkeylength)
+- [チェックサム (SHA512)](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/checksum.sha512)
 
 ---
 
