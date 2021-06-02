@@ -1,10 +1,16 @@
+[![shellcheck](https://github.com/Qithub-BOT/QiiCipher/actions/workflows/shellcheck_linux.yml/badge.svg?branch=master)](https://github.com/Qithub-BOT/QiiCipher/actions/workflows/shellcheck_linux.yml)
+[![shellspec](https://github.com/Qithub-BOT/QiiCipher/actions/workflows/shellspec_linux.yml/badge.svg?branch=master)](https://github.com/Qithub-BOT/QiiCipher/actions/workflows/shellspec_linux.yml)
+![License](https://img.shields.io/badge/license-CC%20BY--SA%204.0-brightgreen.svg)
 <img title="QiiCipher ロゴ" src="https://github.com/Qithub-BOT/QiiCipher/raw/master/images/logo.jpg" width="838px">
 
 # QiiCipher
 
 GitHub 上の公開鍵を使ってファイルの暗号化と署名確認、ローカルの秘密鍵で復号や署名をするシェル・スクリプトです。
 
-[![参加ポリシー](http://img.shields.io/badge/policy-Qithub%203原則-blue.svg)](https://github.com/Qithub-BOT/Qithub-ORG) ![License](https://img.shields.io/badge/license-CC%20BY--SA%204.0-brightgreen.svg) ![日本語ドキュメント](https://img.shields.io/badge/document-ja-brightgreen.svg) ![日本語コミットメッセージ](https://img.shields.io/badge/Commit%20message-ja-brightgreen.svg) ![日本語ソース内コメント](https://img.shields.io/badge/code%20comment-ja-brightgreen.svg)
+[![参加ポリシー](http://img.shields.io/badge/policy-Qithub%203原則-blue.svg)](https://github.com/Qithub-BOT/Qithub-ORG)
+![日本語ドキュメント](https://img.shields.io/badge/document-ja-brightgreen.svg)
+![日本語コミットメッセージ](https://img.shields.io/badge/Commit%20message-ja-brightgreen.svg)
+![日本語ソース内コメント](https://img.shields.io/badge/code%20comment-ja-brightgreen.svg)
 
 ---
 

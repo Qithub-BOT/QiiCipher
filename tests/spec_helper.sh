@@ -11,38 +11,7 @@ PATH_DIR_REPO="$(cd "$(dirname "${SHELLSPEC_SPECDIR:?'SHELLSPEC_SPECDIR not set'
 PATH_DIR_BIN="${PATH_DIR_REPO}/bin"
 PATH_DIR_TEST="${PATH_DIR_REPO}/tests"
 
+# 静的解析(shellcheck)の未使用エラー回避のため export
 export PATH_DIR_REPO
 export PATH_DIR_BIN
 export PATH_DIR_TEST
-
-# -----------------------------------------------------------------------------
-#  テスト中パスが通っていないため引数を丸ごと渡す同名の代替関数を定義
-# -----------------------------------------------------------------------------
-
-archive() {
-    "${PATH_DIR_BIN}/archive" "$@"
-}
-
-check() {
-    "${PATH_DIR_BIN}/check" "$@"
-}
-
-dec() {
-    "${PATH_DIR_BIN}/dec" "$@"
-}
-
-enc() {
-    "${PATH_DIR_BIN}/enc" "$@"
-}
-
-keygen() {
-    "${PATH_DIR_BIN}/keygen" "$@"
-}
-
-sign() {
-    "${PATH_DIR_BIN}/sign" "$@"
-}
-
-verify() {
-    "${PATH_DIR_BIN}/verify" "$@"
-}

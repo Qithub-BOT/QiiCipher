@@ -54,7 +54,12 @@ cd "$PATH_DIR_REPO" || {
 echo '-------------------------------------------------------------------------------'
 echo ' Running unit tests'
 echo '-------------------------------------------------------------------------------'
-runShellSpec
+
+status=$SUCCESS
+
+runShellSpec || {
+    status=$FAILURE
+}
 
 cd "$PATH_DIR_RETURN" || {
     echo >&2 "Failed to change dir to: ${PATH_DIR_RETURN}"
@@ -62,4 +67,4 @@ cd "$PATH_DIR_RETURN" || {
     exit $FAILURE
 }
 
-exit $SUCCESS
+exit $status
