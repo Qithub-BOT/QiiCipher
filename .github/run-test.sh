@@ -53,11 +53,12 @@ cd "$PATH_DIR_REPO" || {
 
 echo '-------------------------------------------------------------------------------'
 echo ' Running unit tests'
+echo '-------------------------------------------------------------------------------'
 
-result=$SUCCESS
+status=$SUCCESS
 
 runShellSpec || {
-    result=$FAILURE
+    status=$FAILURE
 }
 
 cd "$PATH_DIR_RETURN" || {
@@ -66,4 +67,4 @@ cd "$PATH_DIR_RETURN" || {
     exit $FAILURE
 }
 
-exit $result
+exit $status
