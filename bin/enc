@@ -15,17 +15,17 @@
 # -----------------------------------------------------------------------------
 #  Requirement check
 # -----------------------------------------------------------------------------
-which openssl 2>/dev/null 1>/dev/null || {
+if ! type openssl 2>/dev/null 1>/dev/null; then
     echo >&2 '暗号化に必要な openssl コマンドがインストールされていません。'
 
     exit 1
-}
+fi
 
-which curl 2>/dev/null 1>/dev/null || {
+if ! type curl 2>/dev/null 1>/dev/null; then
     echo >&2 'データ取得に必要な curl コマンドがインストールされていません。'
 
     exit 1
-}
+fi
 
 # -----------------------------------------------------------------------------
 #  Main
@@ -50,12 +50,12 @@ fi
 
 # md5s は md5sum/md5 のラッパー関数です.
 md5s() {
-    if [ -e "$(which md5sum)" ]; then
+    if type md5sum 1>/dev/null 2>/dev/null; then
         echo "$1" | md5sum | awk '{ print $1 }'
         return $?
     fi
 
-    if [ -e "$(which md5)" ]; then
+    if type md5 1>/dev/null 2>/dev/null; then
         md5 -q -s "$1"
         return $?
     fi
