@@ -1,3 +1,5 @@
+#shellcheck shell=sh
+
 Describe 'check with args'
     Mock curl
         cat "${PATH_DIR_TEST}/.ssh/openssh/no_pass/id_rsa.pub"
