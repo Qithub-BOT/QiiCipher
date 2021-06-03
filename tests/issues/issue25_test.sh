@@ -1,13 +1,13 @@
-#shellcheck shell=bash
+#shellcheck shell=sh
 
 # md5s は md5sum/md5 のラッパー関数です.
 md5s() {
-    if [ -e "$(which md5sum)" ]; then
+    if type md5sum 1>/dev/null 2>/dev/null; then
         echo "$1" | md5sum | awk '{ print $1 }'
         return $?
     fi
 
-    if [ -e "$(which md5)" ]; then
+    if type md5 1>/dev/null 2>/dev/null; then
         md5 -q -s "$1"
         return $?
     fi
