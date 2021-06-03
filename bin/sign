@@ -76,6 +76,7 @@ if ! openssl dgst -sha1 \
     -sign "$PRIVATEKEY" \
     "$INPUTFILE" >"$OUTPUTFILE"; then
     echo "NG：署名ファイルを生成できませんでした。"
+    rm -f "$OUTPUTFILE"
     exit 1
 fi
 
