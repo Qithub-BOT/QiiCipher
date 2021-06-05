@@ -63,7 +63,7 @@ INPUTFILE=$1
 
 # 出力ファイル名設定
 # ------------------
-OUTPUTFILE="${1}.tar.gz.aes"
+OUTPUTFILE="$(basename "$INPUTFILE").tar.gz.aes"
 if [[ $# == 2 ]]; then
     OUTPUTFILE=$2
 fi
@@ -72,7 +72,7 @@ fi
 # ------------------------------------
 echo -n "- アーカイブ用ディレクトリを作成しています ... "
 
-TEMPDIR="./${INPUTFILE}-archive/"
+TEMPDIR="./$(basename "$INPUTFILE")-archive/"
 
 if ! mkdir -p "$TEMPDIR"; then
     echo "NG：ディレクトリを作成できませんでした。"
@@ -80,6 +80,9 @@ if ! mkdir -p "$TEMPDIR"; then
     exit 1
 fi
 echo "OK"
+
+ARCHIVE_PATH="${TEMPDIR}${OUTPUTFILE}"
+PASSWORD_PATH="${TEMPDIR}${OUTPUTFILE}.passwd"
 
 # パスワードの生成
 # ----------------
@@ -89,7 +92,7 @@ PASSWORD=$(md5s $RANDOM)
 
 if ! (
     umask 077
-    echo "$PASSWORD" >"${TEMPDIR}${OUTPUTFILE}.passwd"
+    echo "$PASSWORD" >"${PASSWORD_PATH}"
 ); then
     echo "NG：ファイルを作成できませんでした。"
     echo "書き込み権限などを確認してください。"
@@ -102,7 +105,7 @@ echo "OK"
 # - 参考文献：https://qiita.com/kite_999/items/cc39179463fd061b2e7d
 echo -n "- ファイルを TAR/GZIP 圧縮 → AES 暗号化します ... "
 
-if ! (tar cz "$INPUTFILE" | openssl enc -e -aes-256-cbc -salt -k "$PASSWORD" -out "${TEMPDIR}${OUTPUTFILE}"); then
+if ! (tar -C "$(dirname "$INPUTFILE")" -cz "$(basename "$INPUTFILE")" | openssl enc -e -aes-256-cbc -salt -k "$PASSWORD" -out "${ARCHIVE_PATH}"); then
     echo "NG：ファイルを圧縮・暗号化できませんでした。"
     exit 1
 fi
@@ -110,7 +113,7 @@ echo "OK"
 
 echo
 echo "✅ ${INPUTFILE} の圧縮＆暗号化が完了しました。"
-echo "  - ファイル名：${TEMPDIR}${OUTPUTFILE}"
+echo "  - ファイル名：${ARCHIVE_PATH}"
 
 echo
 echo "【テスト】共通鍵の動作確認および復号・解凍のテストを行います:"
@@ -120,7 +123,7 @@ echo
 # ----------------
 echo -n "- 共通鍵を読み込んでいます ... "
 
-if ! PASSWORD=$(cat "${TEMPDIR}${OUTPUTFILE}.passwd"); then
+if ! PASSWORD=$(cat "${PASSWORD_PATH}"); then
     echo "NG：共通鍵を読み込めませんでした。"
     exit 1
 fi
@@ -130,13 +133,13 @@ echo "OK"
 # --------------------
 echo -n "- 共通鍵でファイルを復号しています ... "
 
-TEMPFILE="${INPUTFILE}.tar.gz"
+TEMPFILE="$(basename "$INPUTFILE").tar.gz"
 
 if ! openssl enc \
     -d -aes-256-cbc \
     -salt \
     -k "$PASSWORD" \
-    -in "${TEMPDIR}${OUTPUTFILE}" \
+    -in "${ARCHIVE_PATH}" \
     -out "${TEMPDIR}${TEMPFILE}"; then
     echo "NG：ファイルを復号できませんでした。"
     exit 1
@@ -158,7 +161,7 @@ echo "OK"
 echo -n "- オリジナルと解凍済みのファイルのハッシュを比較しています ... "
 
 HASHORIGINAL=$(md5f "$INPUTFILE")
-HASHARCHIVED=$(md5f "$TEMPDIR$INPUTFILE")
+HASHARCHIVED=$(md5f "$TEMPDIR$(basename "$INPUTFILE")")
 
 if [ "$HASHORIGINAL" = "$HASHARCHIVED" ]; then
     echo "OK"
@@ -171,7 +174,7 @@ fi
 # ------------------
 echo -n "- 作業ファイルの削除をしています ... "
 
-if ! (rm -f "$TEMPDIR$TEMPFILE" && rm -f "$TEMPDIR$INPUTFILE"); then
+if ! (rm -f "$TEMPDIR$TEMPFILE" && rm -f "$TEMPDIR$(basename "$INPUTFILE")"); then
     echo "NG：作業ファイルを削除できませんでした。"
     exit 1
 fi
