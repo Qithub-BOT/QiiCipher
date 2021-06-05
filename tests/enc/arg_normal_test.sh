@@ -1,22 +1,22 @@
 #shellcheck shell=sh
 
+file_compare() {
+    openssl rsautl -decrypt \
+        -inkey "${PATH_DIR_TEST}/.ssh/openssh/no_pass/id_rsa.pem" \
+        -in "${PATH_DIR_WORK}/private_data.enc" \
+        -out "${PATH_DIR_WORK}/private_data.dec"
+    cmp -s \
+        "${PATH_DIR_WORK}/private_data.dec" \
+        "${PATH_DIR_TEST}/.ssh/openssh/test_data/private_data" \
+        && echo "successful" || echo "failure"
+}
+
+cleanup() {
+    rm -f "${PATH_DIR_WORK}/private_data.*"
+}
+
 Describe 'enc with args'
     After "cleanup"
-
-    file_compare() {
-        openssl rsautl -decrypt \
-            -inkey "${PATH_DIR_TEST}/.ssh/openssh/no_pass/id_rsa.pem" \
-            -in "${PATH_DIR_WORK}/private_data.enc" \
-            -out "${PATH_DIR_WORK}/private_data.dec"
-        cmp -s \
-            "${PATH_DIR_WORK}/private_data.dec" \
-            "${PATH_DIR_TEST}/.ssh/openssh/test_data/private_data" \
-        && echo "successful" || echo "failure"
-    }
-
-    cleanup() {
-        rm -f "${PATH_DIR_WORK}/private_data.*"
-    }
 
     Mock curl
         cat "${PATH_DIR_TEST}/.ssh/openssh/no_pass/id_rsa.pub"
