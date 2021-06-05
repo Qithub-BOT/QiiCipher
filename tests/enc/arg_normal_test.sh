@@ -22,7 +22,7 @@ Describe 'enc with args'
         cat "${PATH_DIR_TEST}/.ssh/openssh/no_pass/id_rsa.pub"
     End
 
-    It 'should print key length with status 0'
+    It 'should make crypt with status 0'
         When call "${PATH_DIR_BIN}/enc" Qithub-BOT "${PATH_DIR_TEST}/.ssh/openssh/test_data/private_data" "${PATH_DIR_WORK}/private_data.enc"
 
         The output should include "暗号化を完了しました。"
