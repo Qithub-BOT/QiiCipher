@@ -8,6 +8,6 @@ Describe 'check with args'
         When call "${PATH_DIR_BIN}/check" Qithub-BOT "${PATH_DIR_TEST}/.ssh/openssh/no_pass/id_rsa.pem"
 
         The output should include "問題なさそうです。"
-        The status should be success
+        The status should be successful
     End
 End
