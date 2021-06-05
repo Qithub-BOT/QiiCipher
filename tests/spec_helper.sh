@@ -10,8 +10,10 @@
 PATH_DIR_REPO="$(cd "$(dirname "${SHELLSPEC_SPECDIR:?'SHELLSPEC_SPECDIR not set'}")" && pwd)"
 PATH_DIR_BIN="${PATH_DIR_REPO}/bin"
 PATH_DIR_TEST="${PATH_DIR_REPO}/tests"
+PATH_DIR_WORK="/tmp"
 
 # 静的解析(shellcheck)の未使用エラー回避のため export
 export PATH_DIR_REPO
 export PATH_DIR_BIN
 export PATH_DIR_TEST
+export PATH_DIR_WORK
