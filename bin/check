@@ -21,7 +21,7 @@ PATH_DIR_BIN="$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)"
 
 md5r() {
     if [ -e md5sum ]; then
-        echo $RANDOM | md5sum
+        printf "%s" $RANDOM | md5sum
     elif [ -e md5 ]; then
         md5 -q -s $RANDOM
     fi
