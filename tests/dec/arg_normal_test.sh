@@ -8,7 +8,7 @@ file_compare() {
 }
 
 cleanup() {
-    rm -f "${PATH_DIR_WORK}/private_data.*"
+    rm -f "${PATH_DIR_WORK}/private_data.dec"
 }
 
 Describe 'dec with args'

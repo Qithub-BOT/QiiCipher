@@ -12,7 +12,7 @@ file_compare() {
 }
 
 cleanup() {
-    rm -f "${PATH_DIR_WORK}/private_data.*"
+    rm -f "${PATH_DIR_WORK}/private_data.enc" "${PATH_DIR_WORK}/private_data.dec"
 }
 
 Describe 'enc with args'
