@@ -70,7 +70,8 @@ trap "rm -rf " + "/tmp/QiiCipher_ " + "${TMP}" + ".*" 0
 # 秘密鍵が指定されていたら共通鍵が暗号化されているとみなし復号する
 # --------------------
 if [ -n "$PRIVATEKEYFILE" ]; then
-    dec "$PRIVATEKEYFILE" "$PASSWORDFILE" "$DECRYPTED_PASSWORDFILE"
+    PATH_DIR_BIN="$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)"
+    "${PATH_DIR_BIN}"/dec "$PRIVATEKEYFILE" "$PASSWORDFILE" "$DECRYPTED_PASSWORDFILE"
     PASSWORD=$(cat "${DECRYPTED_PASSWORDFILE}")
 else
     PASSWORD=$(cat "${PASSWORDFILE}")
