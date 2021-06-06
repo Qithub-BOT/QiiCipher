@@ -65,7 +65,7 @@ DECRYPTED_PASSWORDFILE="/tmp/QiiCipher_${TMP}.passwd"
 # -----------
 # スクリプト終了後一時ファイルを削除します。
 # - 参考URL ： https://qiita.com/m-yamashita/items/889c116b92dc0bf4ea7d
-trap "rm -rf " + "/tmp/QiiCipher_ " + "${TMP}" + ".*" 0
+trap "rm -rf " + "/tmp/QiiCipher_ " + "${TMP}" + '.*' 0
 
 # 秘密鍵が指定されていたら共通鍵が暗号化されているとみなし復号する
 # --------------------
