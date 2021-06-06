@@ -30,7 +30,7 @@ if [ ! -d ~/.ssh ]; then
     chmod 700 ~/.ssh
 fi
 
-ssh-keygen -t rsa -b 4096 -m PEM -C "$1" -f ~/.ssh/"$2"
+ssh-keygen -t rsa -b 4096 -N "" -m PEM -C "$1" -f ~/.ssh/"$2"
 
 echo
 echo "This is the generated pubkey. Register it on your github account. Then try the 'check' command for error check."
