@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-
-# 軽量ファイルの暗号化スクリプト (UTF-8)
-# ======================================
+# =============================================================================
+#  軽量ファイルの暗号化スクリプト (UTF-8)
+# =============================================================================
 #
 # GitHub 上で公開されている（https://github.com/<user name>.keys で取得できる）
 # 相手の RSA 公開鍵を使って小さなファイルを暗号化します。
@@ -11,10 +11,28 @@
 #       $ ./enc.sh KEINOS ./himitsu.txt
 #
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
-#
+
+# -----------------------------------------------------------------------------
+#  Requirement check
+# -----------------------------------------------------------------------------
+if ! type openssl 2>/dev/null 1>/dev/null; then
+    echo >&2 '暗号化に必要な openssl コマンドがインストールされていません。'
+
+    exit 1
+fi
+
+if ! type curl 2>/dev/null 1>/dev/null; then
+    echo >&2 'データ取得に必要な curl コマンドがインストールされていません。'
+
+    exit 1
+fi
+
+# -----------------------------------------------------------------------------
+#  Main
+# -----------------------------------------------------------------------------
 
 # ヘルプ表示
-# ----------
+# ----------------
 if [[ $# -lt 2 ]]; then
     echo
     echo "使い方: $0 <github user> <input file> [<output file>]"
@@ -30,12 +48,20 @@ if [[ $# -lt 2 ]]; then
     exit 1
 fi
 
+# md5s は md5sum/md5 のラッパー関数です.
 md5s() {
-    if [ -e md5sum ]; then
-        echo "$1" | md5sum
-    elif [ -e md5 ]; then
-        md5 -q -s "$1"
+    if type md5sum 1>/dev/null 2>/dev/null; then
+        echo "$1" | md5sum | awk '{ print $1 }'
+        return $?
     fi
+
+    if type md5 1>/dev/null 2>/dev/null; then
+        md5 -q -s "$1"
+        return $?
+    fi
+
+    echo >&2 'MD5 ハッシュ関数がありません。'
+    exit 1
 }
 
 # コマンド引数取得
@@ -69,7 +95,17 @@ PATHPUBKEY="/tmp/${USERNAME}.${TMP}.pub"
 echo -n "${USERNAME} の GitHub 上の公開鍵を取得中 ... "
 
 if ! curl -s "https://github.com/${USERNAME}.keys" | head -n 1 >"$PATHPUBKEY"; then
-    echo "NG：公開鍵を取得・保存できませんでした。"
+    echo >&2 "NG：公開鍵を取得・保存できませんでした。"
+    exit 1
+fi
+echo "OK"
+
+# 公開鍵のアクセス権変更
+# ------------------
+echo -n "取得した公開鍵のアクセス権を変更中 (0644 -> 0600) ... "
+
+if ! chmod 0600 "$PATHPUBKEY"; then
+    echo >&2 "NG：ファイルのアクセス権を変更できませんでした。"
     exit 1
 fi
 echo "OK"
@@ -82,7 +118,7 @@ echo "OK"
 echo -n "RSA 形式の公開鍵を PKCS8 形式に変換中 ... "
 
 if ! ssh-keygen -f "$PATHPUBKEY" -e -m pkcs8 >"${PATHPUBKEY}.pkcs8"; then
-    echo "NG：RSA -> PKCS8 変換中にエラーが発生しました。"
+    echo >&2 "NG：RSA -> PKCS8 変換中にエラーが発生しました。"
     exit 1
 fi
 echo "OK"
@@ -106,7 +142,7 @@ if ! openssl rsautl \
     -inkey "${PATHPUBKEY}.pkcs8" \
     -in "$INPUTFILE" \
     -out "$OUTPUTFILE"; then
-    echo "NG：暗号化に失敗しました。ファイルのサイズなど、エラー内容を確認ください。"
+    echo >&2 "NG：暗号化に失敗しました。ファイルのサイズなど、エラー内容を確認ください。"
     exit 1
 fi
 echo "OK"
@@ -116,7 +152,7 @@ echo "OK"
 echo -n "一時ファイルの削除中 ... "
 
 if ! (rm "$PATHPUBKEY" && rm "${PATHPUBKEY}.pkcs8"); then
-    echo "NG：一時ファイルの削除に失敗しました。 '/tmp/' ディレクトリ内を手動で削除してください。"
+    echo >&2 "NG：一時ファイルの削除に失敗しました。 '/tmp/' ディレクトリ内を手動で削除してください。"
     exit 1
 fi
 echo "OK"

@@ -13,18 +13,29 @@
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
 
+# md5s は md5sum/md5 のラッパー関数です.
 md5s() {
-    if [ -e md5sum ]; then
-        md5sum <"$1"
-    elif [ -e md5 ]; then
-        md5 -q -s "$1"
+    if type md5sum 1>/dev/null 2>/dev/null; then
+        echo "$1" | md5sum | awk '{ print $1 }'
+        return $?
     fi
+
+    if type md5 1>/dev/null 2>/dev/null; then
+        md5 -q -s "$1"
+        return $?
+    fi
+
+    echo >&2 'MD5 ハッシュ関数がありません。'
+    exit 1
 }
 
 md5f() {
-    if [ -e md5sum ]; then
+    if type md5sum 1>/dev/null 2>/dev/null; then
         md5sum <"$1"
-    elif [ -e md5 ]; then
+        return $?
+    fi
+
+    if type md5 1>/dev/null 2>/dev/null; then
         md5 -q "$1"
     fi
 }

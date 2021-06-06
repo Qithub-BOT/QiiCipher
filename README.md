@@ -1,10 +1,16 @@
+[![shellcheck](https://github.com/Qithub-BOT/QiiCipher/actions/workflows/shellcheck_linux.yml/badge.svg?branch=master)](https://github.com/Qithub-BOT/QiiCipher/actions/workflows/shellcheck_linux.yml)
+[![shellspec](https://github.com/Qithub-BOT/QiiCipher/actions/workflows/shellspec_linux.yml/badge.svg?branch=master)](https://github.com/Qithub-BOT/QiiCipher/actions/workflows/shellspec_linux.yml)
+![License](https://img.shields.io/badge/license-CC%20BY--SA%204.0-brightgreen.svg)
 <img title="QiiCipher ロゴ" src="https://github.com/Qithub-BOT/QiiCipher/raw/master/images/logo.jpg" width="838px">
 
 # QiiCipher
 
 GitHub 上の公開鍵を使ってファイルの暗号化と署名確認、ローカルの秘密鍵で復号や署名をするシェル・スクリプトです。
 
-[![参加ポリシー](http://img.shields.io/badge/policy-Qithub%203原則-blue.svg)](https://github.com/Qithub-BOT/Qithub-ORG) ![License](https://img.shields.io/badge/license-CC%20BY--SA%204.0-brightgreen.svg) ![日本語ドキュメント](https://img.shields.io/badge/document-ja-brightgreen.svg) ![日本語コミットメッセージ](https://img.shields.io/badge/Commit%20message-ja-brightgreen.svg) ![日本語ソース内コメント](https://img.shields.io/badge/code%20comment-ja-brightgreen.svg)
+[![参加ポリシー](http://img.shields.io/badge/policy-Qithub%203原則-blue.svg)](https://github.com/Qithub-BOT/Qithub-ORG)
+![日本語ドキュメント](https://img.shields.io/badge/document-ja-brightgreen.svg)
+![日本語コミットメッセージ](https://img.shields.io/badge/Commit%20message-ja-brightgreen.svg)
+![日本語ソース内コメント](https://img.shields.io/badge/code%20comment-ja-brightgreen.svg)
 
 ---
 
@@ -12,6 +18,7 @@ QiiCipher で使えるコマンドは以下の通りです。
 
 |機能|コマンド|使用例|
 |:---|:--:|:---|
+|鍵生成（Key Generate）|`keygen`|`$ ./keygen KEINOS@example.com MyKeyName`|
 |暗号化（Encrypt）|`enc`|`$ ./enc KEINOS himitsu.txt`|
 |アーカイブ＆暗号化（Archive）|`archive`|[WIP](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/archive)|
 |復号（Decrypt）|`dec`|`$ ./dec ~/.ssh/id_rsa himitsu.txt.enc himitsu.txt`|
@@ -19,6 +26,7 @@ QiiCipher で使えるコマンドは以下の通りです。
 |動作確認（Check）|`check`|`$ ./check KEINOS ~/.ssh/id_rsa`|
 |電子署名（Sign）|`sign`|`$ ./sign KEINOS ~/.ssh/id_rsa himitsu.txt`|
 |署名の確認（Verify）|`verify`|`$ ./verify himitsu.txt KEINOS himitsu.txt.sig`|
+|鍵長の確認（Check Key Length）|`checkkeylength`|`$ ./checkkeylength KEINOS`|
 
 ## Usage
 
@@ -28,6 +36,29 @@ QiiCipher で使えるコマンドは以下の通りです。
 - ダウンロードしたスクリプト・ファイルを別名保存した場合は、各構文内のスクリプト名も置き換えてください。（`enc.sh`としてダウンロードした場合 `$ ./enc` -> `$ ./enc.sh`）
 - 動作確認済み OS と環境はページ下部に記載しています。
 
+### 鍵生成スクリプト（`keygen.sh`）
+
+このシェル・スクリプトは RSA鍵のキーペアを生成します。鍵長は安全のため4096bitに設定されています。
+キーペアは ~/.ssh/ に保存されます。
+
+#### 構文
+
+```shellsession
+$ ./keygen <email> <key name>
+```
+
+##### 引数
+
+- `<email>`：Githubで使用しているメールアドレス(公開鍵内に埋め込まれます)
+- `<key name>` ：希望するキーペアの名前(パス名ではない)
+
+#### ソース
+
+- [`keygen.sh` のソースを見る](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/keygen)
+- [`keygen.sh` のダウンロード](https://qithub-bot.github.io/QiiCipher/bin/keygen)
+- [チェックサム (SHA512)](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/checksum.sha512)
+
+---
 
 ### 暗号化スクリプト（`enc.sh`）
 
@@ -143,6 +174,27 @@ $ ./verify <verify file> <github user> [<sign file>]
 ##### オプション
 
 - `<sign file>`：署名されたファイルのパス。指定されていない場合は、同階層にある `<verify file>.sig` （`.sig` 拡張子を追加したファイル）が使用されます。
+
+---
+
+### 鍵長の検証スクリプト
+
+このシェル・スクリプトは、RSA鍵の鍵長を表示します。
+また、1024bit以下の短い鍵長に対する危険性について注意喚起し、推奨される対応についても表示します。
+
+#### 構文
+
+```shellsession
+$ ./checkkeylength <github user>
+```
+
+- `<github user>`：鍵長確認の対象 GitHub アカウント名
+
+#### ソース
+
+- [`checkkeylength.sh` のソースを見る](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/checkkeylength)
+- [`checkkeylength.sh` のダウンロード](https://qithub-bot.github.io/QiiCipher/bin/checkkeylength)
+- [チェックサム (SHA512)](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/checksum.sha512)
 
 ---
 

@@ -4,7 +4,11 @@
 ARG VARIANT="3.13"
 FROM mcr.microsoft.com/vscode/devcontainers/base:0-alpine-${VARIANT}
 
-RUN apk update \
-     && apk add --no-cache \
+RUN apk add --no-cache \
         shellcheck \
-        shfmt
+        shfmt \
+        openssl
+
+USER vscode
+
+RUN sh -c 'wget -O- https://git.io/shellspec | sh -s -- --yes'

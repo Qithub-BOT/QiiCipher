@@ -13,11 +13,11 @@ SUCCESS=0
 FAILURE=1
 
 # 拡張子のないスクリプトファイル一覧（テスト対象リスト）
-LIST_SCRIPT_NO_EXT="archive check dec enc keygen sign verify"
+LIST_SCRIPT_NO_EXT="archive check dec enc keygen sign verify checkkeylength"
 
-echo '-------------------------------------------------------------------------------'
-echo ' Requirement Check'
-echo '-------------------------------------------------------------------------------'
+echo '==============================================================================='
+echo ' Requirement Check for Linting and Static Analysis'
+echo '==============================================================================='
 
 # ShellCheck のインストールチェック
 which shellcheck 1>/dev/null 2>/dev/null || {
@@ -26,7 +26,7 @@ which shellcheck 1>/dev/null 2>/dev/null || {
 
     exit $FAILURE
 }
-echo "ShellCheck $(shellcheck --version | grep version:)"
+echo "- ShellCheck $(shellcheck --version | grep version:)"
 
 # shfmt のインストールチェック
 which shfmt 1>/dev/null 2>/dev/null || {
@@ -35,7 +35,7 @@ which shfmt 1>/dev/null 2>/dev/null || {
 
     exit $FAILURE
 }
-echo "shfmt version: $(shfmt --version)"
+echo "- shfmt version: $(shfmt --version)"
 
 # -----------------------------------------------------------------------------
 #  Functions
