@@ -3,7 +3,7 @@
 # md5s は md5sum/md5 のラッパー関数です.
 md5s() {
     if type md5sum 1>/dev/null 2>/dev/null; then
-        echo "$1" | md5sum | awk '{ print $1 }'
+        printf "%s" "$1" | md5sum | awk '{ print $1 }'
         return $?
     fi
 
@@ -20,7 +20,7 @@ Describe 'md5s'
     It 'should return MD5 hash of the arg 1'
         When call md5s 'hoge'
 
-        The output should equal 'c59548c3c576228486a1f0037eb16a1b'
+        The output should equal 'ea703e7aa1efda0064eaa507d9e8ab7e'
         The status should be success
     End
 End

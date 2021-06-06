@@ -22,7 +22,7 @@ which shellspec 1>/dev/null 2>/dev/null || {
 
     exit $FAILURE
 }
-echo "- ShellCheck $(shellcheck --version | grep version:)"
+echo "- ShellSpec $(shellspec --version)"
 
 # -----------------------------------------------------------------------------
 #  Functions

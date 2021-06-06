@@ -27,7 +27,7 @@ fi
 
 md5s() {
     if type md5sum 1>/dev/null 2>/dev/null; then
-        echo "$1" | md5sum | awk '{ print $1 }'
+        printf "%s" "$1" | md5sum | awk '{ print $1 }'
         return $?
     fi
 

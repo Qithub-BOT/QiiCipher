@@ -6,8 +6,13 @@ on:
 
 jobs:
   unit_test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-latest]
     steps:
+      - name: Add path
+        run: echo "$HOME/.local/bin" >> "$GITHUB_PATH"
       - name: Checkout the code
         uses: actions/checkout@v2
 
