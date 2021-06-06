@@ -98,6 +98,9 @@ if ! openssl enc \
     exit 1
 fi
 
-tar -xf "$TEMPFILE" -C "${OUTPUTPATH}"
+if ! tar -xf "$TEMPFILE" -C "${OUTPUTPATH}"; then
+    echo >&2 'NG: ファイルを解凍できませんでした。'
+    exit 1
+fi
 
 echo "OK"
