@@ -11,7 +11,7 @@ Describe 'keygen with args'
         When call env HOME="${PATH_DIR_WORK}" "${PATH_DIR_BIN}/keygen" qiiciper@example.com testkey
 
         The output should include "This is the generated pubkey"
-        The status should be successful
+        The status should be success
 
         Path file_private="${PATH_DIR_WORK}/.ssh/testkey"
         The path file_private should be exist

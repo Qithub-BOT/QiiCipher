@@ -26,7 +26,7 @@ Describe 'enc with args'
         When call "${PATH_DIR_BIN}/enc" Qithub-BOT "${PATH_DIR_TEST}/.ssh/openssh/test_data/private_data" "${PATH_DIR_WORK}/private_data.enc"
 
         The output should include "暗号化を完了しました。"
-        The status should be successful
+        The status should be success
 
         Path file_enc="${PATH_DIR_WORK}/private_data.enc"
         The path file_enc should be exist

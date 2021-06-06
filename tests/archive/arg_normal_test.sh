@@ -12,7 +12,7 @@ Describe 'archive with args'
 
         The output should include "ファイルの圧縮・暗号化が完了しました。"
         The error should include "deprecated key derivation used." # TODO
-        The status should be successful
+        The status should be success
 
         Path file_archive="${PATH_DIR_REPO}/private_data-archive/private_data.tar.gz.aes"
         The path file_archive should be exist
