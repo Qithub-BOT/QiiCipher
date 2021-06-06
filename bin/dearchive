@@ -9,12 +9,12 @@
 # - 使い方の例：
 #   以下のコマンドで復号＆解凍済みファイル `myfile` が作成されます。
 #   （password.passwdはパスワードが書かれたテキストファイルです）
-#       $ ./dearchive myfile.tar.gz.aes myfile password.passwd
+#       $ ./dearchive myfile.tar.gz.aes ./ password.passwd
 #
 #   ４つ目の引数として秘密鍵を指定すると、３つ目の引数で渡したパスワードファイルがencスクリプトで暗号化
 #   されているとみなし、秘密鍵で復号してからパスワードとして利用します。
 #   （password.passwd.encはencスクリプトで暗号化済みのパスワードが記録されたバイナリファイルです）
-#       $ ./dearchive myfile.tar.gz.aes myfile password.passwd.enc ~/.ssh/github_key
+#       $ ./dearchive myfile.tar.gz.aes ./ password.passwd.enc ~/.ssh/github_key
 #
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
@@ -25,10 +25,10 @@ if [[ $# -lt 3 ]]; then
     echo
     echo "ファイルを復号して解凍します。（AES-256-CBC暗号）"
     echo
-    echo "使い方: $0 <input file> <output file> <password file> [<private key>]"
+    echo "使い方: $0 <input file> <output path> <password file> [<private key>]"
     echo
     echo "- <input file>  : 復号＆解凍したいファイルのパス"
-    echo "- <output file> : 復号＆解凍済みファイルの出力先のパス"
+    echo "- <output path> : 復号＆解凍済みファイルの出力先のパス"
     echo "- <password file> : パスワードが記載されたファイル。"
     echo "                    オプションの<private key>が指定されている場合は"
     echo "                    パスワードがencスクリプトによって暗号化されているとみなします。"
@@ -50,15 +50,14 @@ md5s() {
 # コマンド引数取得
 # ----------------
 INPUTFILE=$1
-OUTPUTFILE=$2
+OUTPUTPATH=$2
 PASSWORDFILE=$3
 PRIVATEKEYFILE=$4
 
 # 一時ファイル
 # ------------
 TMP=$(md5s $RANDOM)
-OUTPUTFILENAME=$(basename "${OUTPUTFILE}")
-TEMPFILE="/tmp/QiiCipher_${TMP}.${OUTPUTFILENAME}.tar.gz"
+TEMPFILE="/tmp/QiiCipher_${TMP}.tar.gz"
 DECRYPTED_PASSWORDFILE="/tmp/QiiCipher_${TMP}.passwd"
 
 # trap の設定
@@ -91,6 +90,6 @@ if ! openssl enc \
     exit 1
 fi
 
-tar -xf "$TEMPFILE" -C "$(dirname "${OUTPUTFILE}")"
+tar -xf "$TEMPFILE" -C "${OUTPUTPATH}"
 
 echo "OK"
