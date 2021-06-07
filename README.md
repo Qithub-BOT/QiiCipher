@@ -22,6 +22,7 @@ QiiCipher で使えるコマンドは以下の通りです。
 |暗号化（Encrypt）|`enc`|`$ ./enc KEINOS himitsu.txt`|
 |アーカイブ＆暗号化（Archive）|`archive`|[WIP](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/archive)|
 |復号（Decrypt）|`dec`|`$ ./dec ~/.ssh/id_rsa himitsu.txt.enc himitsu.txt`|
+|復号＆解凍（DeArchive）|`dearchive`|[WIP](https://github.com/Qithub-BOT/QiiCipher/blob/master/bin/dearchive)|
 |動作確認（Check）|`check`|`$ ./check KEINOS ~/.ssh/id_rsa`|
 |電子署名（Sign）|`sign`|`$ ./sign KEINOS ~/.ssh/id_rsa himitsu.txt`|
 |署名の確認（Verify）|`verify`|`$ ./verify himitsu.txt KEINOS himitsu.txt.sig`|

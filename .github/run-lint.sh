@@ -13,7 +13,7 @@ SUCCESS=0
 FAILURE=1
 
 # 拡張子のないスクリプトファイル一覧（テスト対象リスト）
-LIST_SCRIPT_NO_EXT="archive check dec enc keygen sign verify checkkeylength"
+LIST_SCRIPT_NO_EXT="archive check dec enc keygen sign verify checkkeylength dearchive"
 
 echo '==============================================================================='
 echo ' Requirement Check for Linting and Static Analysis'

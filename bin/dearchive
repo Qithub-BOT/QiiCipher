@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+
+# AES SHA256 CBC 復号スクリプト (UTF-8)
+# =======================================
+#
+#
+# OpenSSL の AES-256-CBC と「共通鍵」を使って暗号化されたファイルを復号します。
+#
+# - 使い方の例：
+#   以下のコマンドで復号＆解凍済みファイル `myfile` が作成されます。
+#   （password.passwdはパスワードが書かれたテキストファイルです）
+#       $ ./dearchive myfile.tar.gz.aes ./ password.passwd
+#
+#   ４つ目の引数として秘密鍵を指定すると、３つ目の引数で渡したパスワードファイルがencスクリプトで暗号化
+#   されているとみなし、秘密鍵で復号してからパスワードとして利用します。
+#   （password.passwd.encはencスクリプトで暗号化済みのパスワードが記録されたバイナリファイルです）
+#       $ ./dearchive myfile.tar.gz.aes ./ password.passwd.enc ~/.ssh/github_key
+#
+# - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
+#
+
+# ヘルプ表示
+# ----------
+if [[ $# -lt 3 ]]; then
+    echo
+    echo "ファイルを復号して解凍します。（AES-256-CBC暗号）"
+    echo
+    echo "使い方: $0 <input file> <output path> <password file> [<private key>]"
+    echo
+    echo "- <input file>  : 復号＆解凍したいファイルのパス"
+    echo "- <output path> : 復号＆解凍済みファイルの出力先のパス"
+    echo "- <password file> : パスワードが記載されたファイル。"
+    echo "                    オプションの<private key>が指定されている場合は"
+    echo "                    パスワードがencスクリプトによって暗号化されているとみなします。"
+    echo
+    echo "[オプション]"
+    echo "- <private key> : encスクリプトで暗号化されたパスワードを復号するための秘密鍵。"
+    echo
+    exit 1
+fi
+
+# md5s は md5sum/md5 のラッパー関数です.
+md5s() {
+    if type md5sum 1>/dev/null 2>/dev/null; then
+        echo "$1" | md5sum | awk '{ print $1 }'
+        return $?
+    fi
+
+    if type md5 1>/dev/null 2>/dev/null; then
+        md5 -q -s "$1"
+        return $?
+    fi
+
+    echo >&2 'MD5 ハッシュ関数がありません。'
+    exit 1
+}
+
+# コマンド引数取得
+# ----------------
+INPUTFILE=$1
+OUTPUTPATH=$2
+PASSWORDFILE=$3
+PRIVATEKEYFILE=$4
+
+# 一時ファイル
+# ------------
+TMP=$(md5s $RANDOM)
+TEMPFILE="/tmp/QiiCipher_${TMP}.tar.gz"
+DECRYPTED_PASSWORDFILE="/tmp/QiiCipher_${TMP}.passwd"
+
+# trap の設定
+# -----------
+# スクリプト終了後一時ファイルを削除します。
+# - 参考URL ： https://qiita.com/m-yamashita/items/889c116b92dc0bf4ea7d
+trap "rm -rf /tmp/QiiCipher_${TMP}"'.*' 0
+# 秘密鍵が指定されていたら共通鍵が暗号化されているとみなし復号する
+# --------------------
+if [ -n "$PRIVATEKEYFILE" ]; then
+    PATH_DIR_BIN="$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)"
+    "${PATH_DIR_BIN}"/dec "$PRIVATEKEYFILE" "$PASSWORDFILE" "$DECRYPTED_PASSWORDFILE"
+    PASSWORD=$(cat "${DECRYPTED_PASSWORDFILE}")
+else
+    PASSWORD=$(cat "${PASSWORDFILE}")
+fi
+
+# ファイルの復号テスト
+# --------------------
+echo -n "- 共通鍵でファイルを復号しています ... "
+
+if ! openssl enc \
+    -d -aes-256-cbc \
+    -salt \
+    -k "$PASSWORD" \
+    -in "${INPUTFILE}" \
+    -out "${TEMPFILE}"; then
+    echo "NG：ファイルを復号できませんでした。"
+    exit 1
+fi
+
+if ! tar -xf "$TEMPFILE" -C "${OUTPUTPATH}"; then
+    echo >&2 'NG: ファイルを解凍できませんでした。'
+    exit 1
+fi
+
+echo "OK"
