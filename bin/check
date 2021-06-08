@@ -61,7 +61,7 @@ PATHFILE="./sample.${FILENAME}.txt"
 
 # サンプル・ファイルの作成
 # ------------------------
-echo -n "サンプル・ファイルを作成しています ... "
+printf "%s" "サンプル・ファイルを作成しています ... "
 
 if ! echo "$SAMPLETEXT" >"$PATHFILE"; then
     echo "NG：サンプル・ファイルの作成に失敗しました。"
@@ -72,7 +72,7 @@ echo "OK"
 
 # サンプル・ファイルの暗号化
 # --------------------------
-echo -n "サンプル・ファイルを暗号化しています ... "
+printf "%s" "サンプル・ファイルを暗号化しています ... "
 
 if ! RESULT=$("$PATH_DIR_BIN"/enc "$USERNAME" "$PATHFILE" 2>&1); then
     echo "NG：サンプル・ファイルの暗号化に失敗しました。"
@@ -83,7 +83,7 @@ echo "OK"
 
 # サンプル・ファイルの復号
 # ------------------------
-echo -n "暗号ファイルを復号しています ... "
+printf "%s" "暗号ファイルを復号しています ... "
 
 if ! RESULT=$("$PATH_DIR_BIN"/dec "$SECRETKEY" "${PATHFILE}.enc" "${PATHFILE}.dec" 2>&1); then
     echo "NG：暗号ファイルの復号中にエラーが発生しました。"
@@ -95,7 +95,7 @@ echo "OK"
 
 # サンプル・ファイルの比較
 # ------------------------
-echo -n "オリジナルと復号ファイルを比較しています ... "
+printf "%s" "オリジナルと復号ファイルを比較しています ... "
 
 if ! diff "$PATHFILE" "${PATHFILE}.dec"; then
     echo "NG：オリジナルと復号されたファイルが異なります。"
@@ -111,7 +111,7 @@ echo "OK"
 
 # サンプル・ファイルの削除
 # ----------------------
-echo -n "サンプル・ファイルの削除中 ... "
+printf "%s" "サンプル・ファイルの削除中 ... "
 
 if ! (rm "$PATHFILE" && rm "${PATHFILE}.enc"); then
     echo "NG：一時ファイルの削除に失敗しました。 手動で削除してください。"

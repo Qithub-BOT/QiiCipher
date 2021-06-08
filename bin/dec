@@ -35,7 +35,7 @@ OUTPUTFILE=$3
 # テキストへ復号
 # --------------
 # 参考URL ： https://qiita.com/kunichiko/items/3c0b1a2915e9dacbd4c1
-echo -n "ファイルを復号しています ... "
+printf "%s" "ファイルを復号しています ... "
 
 if ! openssl rsautl -decrypt -inkey "$SECRETKEY" -in "$INPUTFILE" -out "$OUTPUTFILE"; then
     echo "NG：復号中にエラーが発生しました。以下の内容が考えられます。"

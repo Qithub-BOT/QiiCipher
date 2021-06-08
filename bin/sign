@@ -70,7 +70,7 @@ trap 'rm -rf /tmp/${USERNAME}.*' 0
 # 電子署名の生成
 # --------------
 # - 参考URL ： https://qiita.com/kunichiko/items/3c0b1a2915e9dacbd4c1
-echo -n "ファイル ${INPUTFILE} の署名ファイルを生成中 ... "
+printf "%s" "ファイル ${INPUTFILE} の署名ファイルを生成中 ... "
 
 if ! openssl dgst -sha1 \
     -sign "$PRIVATEKEY" \
@@ -99,7 +99,7 @@ PATHPUBKEY="/tmp/${USERNAME}.${TMP}.pub"
 # ユーザの GitHub の公開鍵一覧の１行目を取得
 # - 取得先は： https://github.com/<user name>.keys
 # - 参考URL ： https://qiita.com/m0r1/items/af16c41475d493ab6774
-echo -n "${USERNAME} の GitHub 上の公開鍵を取得中 ... "
+printf "%s" "${USERNAME} の GitHub 上の公開鍵を取得中 ... "
 
 if ! curl -s "https://github.com/${USERNAME}.keys" | head -n 1 >"$PATHPUBKEY"; then
     echo "NG：公開鍵を取得・保存できませんでした。"
@@ -112,7 +112,7 @@ echo "OK"
 # - 参考URL ：
 #   - https://qiita.com/drobune/items/bf5d689eff7f69ed6866
 #   - https://qiita.com/connvoi_tyou/items/3e86b6b68c3f398b3244
-echo -n "RSA 形式の公開鍵を PKCS8 形式に変換中 ... "
+printf "%s" "RSA 形式の公開鍵を PKCS8 形式に変換中 ... "
 
 if ! ssh-keygen -f "$PATHPUBKEY" -e -m pkcs8 >"${PATHPUBKEY}.pkcs8"; then
     echo "NG：RSA -> PKCS8 変換中にエラーが発生しました。"
@@ -123,7 +123,7 @@ echo "OK"
 # 電子署名の検証
 # --------------
 # - 参考URL ： https://qiita.com/kunichiko/items/3c0b1a2915e9dacbd4c1
-echo -n "ファイル ${INPUTFILE} の署名ファイルを検証中 ... "
+printf "%s" "ファイル ${INPUTFILE} の署名ファイルを検証中 ... "
 
 if ! openssl dgst \
     -sha1 \

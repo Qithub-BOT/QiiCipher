@@ -70,7 +70,7 @@ fi
 
 # 暗号ファイル保存先ディレクトリの作成
 # ------------------------------------
-echo -n "- アーカイブ用ディレクトリを作成しています ... "
+printf "%s" "- アーカイブ用ディレクトリを作成しています ... "
 
 TEMPDIR="./$(basename "$INPUTFILE")-archive/"
 
@@ -86,7 +86,7 @@ PASSWORD_PATH="${TEMPDIR}${OUTPUTFILE}.passwd"
 
 # パスワードの生成
 # ----------------
-echo -n "- 共通鍵を作成しています ... "
+printf "%s" "- 共通鍵を作成しています ... "
 
 PASSWORD=$(md5s $RANDOM)
 
@@ -103,7 +103,7 @@ echo "OK"
 # ファイルの圧縮＆暗号化
 # ----------------------
 # - 参考文献：https://qiita.com/kite_999/items/cc39179463fd061b2e7d
-echo -n "- ファイルを TAR/GZIP 圧縮 → AES 暗号化します ... "
+printf "%s" "- ファイルを TAR/GZIP 圧縮 → AES 暗号化します ... "
 
 if ! (tar -C "$(dirname "$INPUTFILE")" -cz "$(basename "$INPUTFILE")" | openssl enc -e -aes-256-cbc -salt -k "$PASSWORD" -out "${ARCHIVE_PATH}"); then
     echo "NG：ファイルを圧縮・暗号化できませんでした。"
@@ -121,7 +121,7 @@ echo
 
 # 共通鍵の読み込み
 # ----------------
-echo -n "- 共通鍵を読み込んでいます ... "
+printf "%s" "- 共通鍵を読み込んでいます ... "
 
 if ! PASSWORD=$(cat "${PASSWORD_PATH}"); then
     echo "NG：共通鍵を読み込めませんでした。"
@@ -131,7 +131,7 @@ echo "OK"
 
 # ファイルの復号テスト
 # --------------------
-echo -n "- 共通鍵でファイルを復号しています ... "
+printf "%s" "- 共通鍵でファイルを復号しています ... "
 
 TEMPFILE="$(basename "$INPUTFILE").tar.gz"
 
@@ -148,7 +148,7 @@ echo "OK"
 
 # 解凍のテスト
 # ------------
-echo -n "- 復号された圧縮ファイルの解凍をしています ... "
+printf "%s" "- 復号された圧縮ファイルの解凍をしています ... "
 
 if ! tar -C "$TEMPDIR" -xf "$TEMPDIR$TEMPFILE"; then
     echo "NG：ファイルを解凍できませんでした。"
@@ -158,7 +158,7 @@ echo "OK"
 
 # オリジナルと解凍後の同一テスト
 # ------------------------------
-echo -n "- オリジナルと解凍済みのファイルのハッシュを比較しています ... "
+printf "%s" "- オリジナルと解凍済みのファイルのハッシュを比較しています ... "
 
 HASHORIGINAL=$(md5f "$INPUTFILE")
 HASHARCHIVED=$(md5f "$TEMPDIR$(basename "$INPUTFILE")")
@@ -172,7 +172,7 @@ fi
 
 # 作業ファイルの削除
 # ------------------
-echo -n "- 作業ファイルの削除をしています ... "
+printf "%s" "- 作業ファイルの削除をしています ... "
 
 if ! (rm -f "$TEMPDIR$TEMPFILE" && rm -f "$TEMPDIR$(basename "$INPUTFILE")"); then
     echo "NG：作業ファイルを削除できませんでした。"

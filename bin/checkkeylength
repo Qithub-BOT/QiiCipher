@@ -60,7 +60,7 @@ PATHPUBKEY="/tmp/${USERNAME}.${TMP}.pub"
 # ユーザの GitHub の公開鍵一覧の１行目を取得
 # - 取得先は： https://github.com/<user name>.keys
 # - 参考URL ： https://qiita.com/m0r1/items/af16c41475d493ab6774
-echo -n "${USERNAME} の GitHub 上の公開鍵を取得中 ... "
+printf "%s" "${USERNAME} の GitHub 上の公開鍵を取得中 ... "
 
 if ! curl -s "https://github.com/${USERNAME}.keys" | head -n 1 >"$PATHPUBKEY"; then
     echo "NG：公開鍵を取得・保存できませんでした。"
