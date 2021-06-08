@@ -1,9 +1,5 @@
 # Contributing to QiiCipher
 
-## 基本用語
-
-- [GitHub 用語集](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary) @ docs.github.com
-
 ## 基本ルール
 
 QiiCipher の基本ルールは、[Qithub Organization の基本ルール](https://github.com/Qithub-BOT/Qithub-ORG/wiki/%E3%83%9D%E3%83%AA%E3%82%B7%E3%83%BC%E3%80%81%E3%82%B3%E3%83%B3%E3%82%BB%E3%83%97%E3%83%88)と同じです。
@@ -13,39 +9,42 @@ QiiCipher の基本ルールは、[Qithub Organization の基本ルール](https
 - HAPPY: 楽しく作って、楽しく使える
 - FUNNY: いつもどこかにユーモアを
 - 👍 😄 🤔 : emoji でシンプルに気持ちを伝えよう
+    - QiiCipher ではコメントによるリアクションより、emoji によるリアクションを推奨しています。面白画像などによるリアクションならさらに 👍 ！
+    - QiiCipher では以下の emoji は次の意味として使っています。
+      - `👀 `:「確認中」「レスしてないけど見てるよ」「`I'm following`」「`I'm watching`」
+      - `🤔`: 「うーん、どうでしょう...（長嶋風）」「いささか疑問」「なんか問題ありそうな気がする」「`Hmmm...`」
 
-つまり、他人やアプリのユーザがどう思おうとも、[コントリビュータ](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#contributor)（改善・改良に貢献してくださっているボランティアの方々）同士が楽しければ、それで良いということです。
+## 参加ルール
 
-「やってみた」「でも、ダメだった」ことすら楽しんでいるので、そこらへんは「仕事じゃないので真面目にやる（楽しむ）」のがルールです。逆に楽しくない内容や気分が乗らない時はスルーしてください。
+QiiCipher は、コントリビュータによる、コントリビュータのためのツールです。
 
-もちろん「レベルを見るため悪いコードをこっそり仕込んでみた」「スッとボケた振りをしてコントリビュータやユーザを困らせよう」といった、おふざけはユーモアでもないし、楽しくもないので禁止です。
+[コントリビュータ](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#contributor)とは、改善・改良に貢献してくださっているボランティアの方々のことです。他の人やアプリのユーザがどう思おうとも、コントリビュータ同士が楽しく納得できれば、それで良いというルールです。逆に、楽しくない時や気分が乗らない時はスルーして休んでください。
+
+「やってみた」「でも、ダメだった」ことすら楽しんでいるので、そこらへんは「仕事じゃないので真面目に楽しむ」のがルールです。
+
+- 詳しくは [HOW_TO_CONTRIBUTE.md](./.github/HOW_TO_CONTRIBUTE.md) をご覧ください。
 
 ## PR （Pull Request）について
 
-- PR 先: `master` ブランチ
+- PR 先: `main` ブランチ
+- 詳しくは [HOW_TO_PULL_REQUEST.md](./.github/HOW_TO_PULL_REQUEST.md) をご覧ください。
 
-typo, ドキュメント改善、リファクタ、不具合修正など、どんな PR でも歓迎です。PR に馴染みがない方も、遠慮なく試してみてください。何か失敗しても、みんなで直して行きましょう。
-
-詳しくは [HOW_TO_PULL_REQUEST.md](./.github/HOW_TO_PULL_REQUEST.md) をご覧ください。
-
-## 不具合報告先
-
-- [Issues](https://github.com/Qithub-BOT/QiiCipher/issues)
-
-Issues は、基本的に**不具合がある（期待する動きと違う）場合の報告先**です。
-
-可能な限り再現性のある情報提供をお願いします。
-
-一番ベストな方法は、「期待する出力」のテストを作成し、それが失敗するパターンを明示した issue です。コントリビュータの方々も、たいへん対応しやすくなります。
-
-- テストの例: https://github.com/Qithub-BOT/QiiCipher/tree/master/tests/issues
-
-typo やドキュメントの記述改善などは、直接 PR するか [Discussions](https://github.com/Qithub-BOT/QiiCipher/discussions) で提案してください。
-
-情報が少なく、コントリビュータが作成したテストがパス（正常終了）した場合は、その Issue はクローズされる可能性があることをご承知おきください。
-
-## 改善提案先・質問先
+## 改善提案・質問について
 
 - [Discussions](https://github.com/Qithub-BOT/QiiCipher/discussions)
 
-「PR したいが意見や情報が欲しい」「不具合なのかわからない」「●●● 機能が欲しい」など、不具合報告以外に関する掲示板です。
+**不具合の報告以外**に関しては [Discussions](https://github.com/Qithub-BOT/QiiCipher/discussions) にてお願いします。
+
+QiiCipher では、**基本的に先に PR したもの勝ち**です。しかし「質問したい」「PR したいが、意見や情報が欲しい」「不具合なのかわからない」「バグだと思うが再現性があるのかわからない」「●●● 機能が欲しい」といった場合は [Discussions](https://github.com/Qithub-BOT/QiiCipher/discussions) に投稿してください。
+
+## 不具合報告について
+
+QiiCipher における Issues は「実装予定」もしくは「修正予定」のタスク一覧で、基本的に**再現性のある不具合報告のみ Issues で受け付けます**。
+
+対応中のものは [PullRequest 一覧](https://github.com/Qithub-BOT/QiiCipher/pulls) で確認いただき、質問などは [Discussions](https://github.com/Qithub-BOT/QiiCipher/discussions) でお願いします。
+
+- 詳しくは [HOW_TO_ISSUE.md](./.github/HOW_TO_ISSUE.md) をご覧ください。
+
+## 基本用語
+
+- [GitHub 用語集](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary) @ docs.github.com
