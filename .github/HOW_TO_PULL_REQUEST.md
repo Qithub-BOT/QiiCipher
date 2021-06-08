@@ -1,31 +1,84 @@
-
-# PR (Pull Request) について
-
-typo, ドキュメント改善、リファクタ、不具合修正など、どんな PR でも歓迎です。PR に馴染みがない方も、遠慮なく試してみてください。何か失敗しても、みんなで直して行きましょう。
+# How To Pull Request
 
 - PR 先: `master` ブランチ
 
-## 作業を始める前に
+PR 先は `master` ブランチにお願いします。
 
-PR（[プルリク](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#pull-request)）の作業に入る前に、過去の PR や Issue や Discussion を確認してください。
+typo, ドキュメント改善、リファクタ、不具合修正など、どんな PR（[プルリク](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#pull-request)）でも歓迎です。PR に馴染みがない方も、PR の練習がてら遠慮なく試してみてください。何か失敗しても、みんなで直して行きましょう。
+
+## PR 作業を始める前に
+
+PR の作業に入る前に、過去の PR や Issue や Discussion を検索・確認してください。
 
 と言うのも「途中まで実装するも諸事情により諦めた過去の PR」があるかもしれないからです。引き継げるなら（流用できるなら）それに越したことはありません。
 
 もしくは「同じ内容の提案や実装をするも却下されたもの」もあるかもしれません。せっかく PR しても同じ理由で却下されないためにも、確認をお願いします。
 
+## 自動テストについて
+
+このリポジトリでは、`PR` もしくは `PR` されたブランチに `push` があると自動的に基本テストが走ります。
+
+基本テストには `linter`（構文・文法チェック）、静的解析、ユニット・テストが含まれます。
+
+これらのテストをパスしないと、PR されてもレビューおよびマージはされません。
+
+- 詳しくは [HOW_TO_RUN_TESTS.md](./HOW_TO_RUN_TESTS.md) をご覧ください。
+
+## レビューについて
+
+[レビュー](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#review)とは、コントリビュータが「PR 内容」の確認と「気になる点」をコメントすることを言います。
+
+- コントリビュートについて: [HOW_TO_CONTRIBURE.md](./HOW_TO_CONTRIBUTE.md)
+
+つまり、自分が作成・修正したドキュメントやスクリプトを「手離れさせる」「独り立ちさせる」ための受け入れの儀式（[マージ](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#merge)前の確認）でもあります。
+
+PR 時にレビュー数が多いほど、また修正をするほど、その後のメンテナンス性と均質性が増します。
+
+ここで言う均質性とは、リポジトリ内の他のドキュメントや、スクリプトが持つ方言・習慣的なものとの「馴染みやすさ」を言います。
+
+レビューをクチうるさく感じるかもしれませんが、マージされた直後からコントリビュータ全員がその後の面倒をみやすくなるためなので、他意はありません。
+
+また、レビューを経ても「マージ後に気付いた」ことの方が多いため、別途「追い PR」されて成長して行きます。そのため、**一度マージされたものは、自分の意図しない方向に進む可能性がある**ことをご承知おきください。
+
+## マージについて
+
+レビュアーの `Approved` が付くと、リポジトリ責任者（不在の場合はメンテナ）の判断により PR が `main` ブランチにマージ（`squash merge`）されます。 （`squash` に関しては下部にある「理想的な PR の流れ」をご覧ください）
+
+## PR 時の注意点
+
+基本的に **`Reviewer`（レビュアー。レビューする人）の割り当ては、レビュイー（PR する側。レビューされる側）からはしないでください**。
+
+基本は、レビュアー本人かメンテナ（リポジトリの維持を担当する[コラボレータ](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#collaborator)）によって割り当てられます。
+
+PR のコメントによりレビュー依頼に気づいたコントリビュータが「（お。いま余裕あるからチェックしよっかなー）」とか、PR 内容をみて「（あ。いささか気になる点があるー）」とか「（typo めっけ！）」と思ったコントリビュータが `Reviewers` に自身を割り当てます。
+
+**レビューの目は、多ければ多いほど良い**ので、1 人のコントリビュータが、すべての問題のチェックの責任を追うものではありませんし、複数人がレビューすることもあります
+
+また、レビューの立候補者が出てこなさそうな場合や、内容によって「特定のコントリビュータの目を通させた方がいいかもしれない」とメンテナが判断した場合は、`ping` 的にレビュアーを `Reviewers` に割り当てることもあります。
+
+もちろん、特定のコントリビュータにお願いしたい場合を除きます。ご指名というやつです。その場合はコメントに[メンション](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#mention)をお願いします。（他のテーブルが忙しくてレビューに来れないかもしれませんが）
+
+- コントリビュータ
+  - https://github.com/Qithub-BOT/QiiCipher/graphs/contributors
+- メンテナ
+  - @yoshi389111
+  - @KEINOS
+- リポジトリ責任者
+  - @KEINOS
+
 ## Draft PR のススメ
 
-このリポジトリでは [Draft PR](https://github.blog/jp/2019-02-19-introducing-draft-pull-requests/) を用いた PR を推奨しています。もちろん、小さな PR や、PR に慣れた方は、この限りではありません。
+このリポジトリでは Draft PR を用いた PR を推奨しています。
+
+- [Draft Pull Requestをリリースしました](https://github.blog/jp/2019-02-19-introducing-draft-pull-requests/) @ GitHub 公式ブログ
+
+### Draft PR について
 
 Draft PR とは、何かの作業を始める前に `Draft` で PR を上げてから作業を開始する方法です。
 
-一応の作業が終わり、`Draft` が外れ、一連の必須テストをパスして初めてレビューが開始されます。
+一応の作業が終わり、一連の必須テストもパスしたら、**`Draft` を外してレビュー依頼をコメントするとレビューが開始されます**。
 
-> <sub>🐒 &nbsp; [レビュー](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#review)とは、自分が作成・修正したスクリプトやドキュメントを「手離れさせる」「独り立ちさせる」ための儀式です。</sub><br />
-> <sub>具体的には、コントリビュータが「PR 内容」の確認と「気になる点」を指摘することを言います。</sub><br />
-> <sub>レビュー数が多いほど、修正をするほど、その後のメンテナンス性と均質性が増します。ここで言う均質性とは、リポジトリ内の他のスクリプトやドキュメントが持つ方言的なものとの「馴染みやすさ」を言います。これにより、[マージ](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#merge)直後から手離れしやすくなります。</sub><br />
-> <sub>もちろん「マージ後に気付いたこと」が出てくることが多いので、その場合は別途修正の PR がされて成長して行きます。</sub><br />
-> <sub>なお、QiiCipher のコントリビュータになるには、過去に 1 度でも、QiiCipher のリポジトリに PR/Issue/Discussion にコントリビュート（投稿、参加）していれば自動的に[コントリビュータの一員](https://github.com/Qithub-BOT/QiiCipher/graphs/contributors)に追加されます。</sub>
+サクッとできない（時間のかかりそうな）類いの PR を進める場合は、Draft PR をオススメします。もちろん、小さな PR や、PR に慣れた方は、この限りではありません。
 
 ### 従来の PR 方法と Draft PR の違い
 
@@ -43,29 +96,7 @@ Draft PR とは、何かの作業を始める前に `Draft` で PR を上げて�
 6. 作業を引き継ぐことができる。
     - `Draft` PR を行うことにより作業内容が残ることになります。これは、他のコントリビュータの参考情報となり、流用可能な作業内容を引き継げるということでもあります。おそらく、これが 1 番のメリットかも知れません。
 
-### PR 時の注意点
-
-- 基本的に `Reviewer`（レビュアー。レビューする人）の割り当ては、レビュイー（PR する側。レビューされる側）からはしないでください。
-
-もちろん、特定のコントリビュータにお願いしたい場合を除きます。ご指名というやつです。その場合はコメントに[メンション](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#mention)をお願いします。（他のテーブルが忙しくてレビューに来れないかもしれませんが）
-
-しかし、基本はレビュー依頼に気づいたコントリビュータが「（お。いま余裕あるからチェックしよっかなー）」とか、PR 内容をみて「（あ。いささか気になる点があるー）」とか「（typo めっけ！）」と思ったコントリビュータ本人が `Reviewers` に自身を割り当てます。
-
-そのため、1 人のコントリビュータが、すべての問題のチェックの責任を追うものではありません。
-
-**レビューの目は、多ければ多いほど良い**ので、複数人が立候補することもありますし、メンテナ（[コラボレーター](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#collaborator)）によって割り当てられたりもします。
-
-特に、レビューの立候補者が出てこなさそうな場合や、内容によって「特定のコントリビュータの目を通させた方がいいかもしれない」とメンテナが判断した場合は、`ping` 的にコントリビュータを `Reviewers` に割り当てることもあります。
-
-- コントリビュータ
-  - https://github.com/Qithub-BOT/QiiCipher/graphs/contributors
-- メンテナ
-  - @yoshi389111
-  - @KEINOS
-- リポジトリ責任者
-  - @KEINOS
-
-### 理想的な PR の流れ
+## 理想的な PR の流れ
 
 [PR (Pull Request)](https://docs.github.com/ja/desktop/contributing-and-collaborating-using-github-desktop/working-with-your-remote-repository-on-github-or-github-enterprise/creating-an-issue-or-pull-request#creating-a-pull-request) に慣れている方は、この限りではありませんが、理想的な PR のフローは以下の通りです。
 
