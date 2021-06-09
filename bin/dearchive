@@ -21,7 +21,7 @@
 
 # ヘルプ表示
 # ----------
-if [[ $# -lt 3 ]]; then
+if [ $# -lt 3 ]; then
     echo
     echo "ファイルを復号して解凍します。（AES-256-CBC暗号）"
     echo

@@ -15,7 +15,7 @@
 
 # ヘルプ表示
 # ----------
-if [[ $# -lt 2 ]]; then
+if [ $# -lt 2 ]; then
     echo
     echo "使い方: $0 <email> <keyname>"
     echo

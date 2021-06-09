@@ -30,7 +30,7 @@ md5f() {
 
 # ヘルプ表示
 # ----------
-if [[ $# -lt 1 ]]; then
+if [ $# -lt 1 ]; then
     echo
     echo "ファイルを圧縮して暗号化します。（AES-256-CBC暗号）"
     echo
@@ -52,7 +52,7 @@ INPUTFILE=$1
 # 出力ファイル名設定
 # ------------------
 OUTPUTFILE="$(basename "$INPUTFILE").tar.gz.aes"
-if [[ $# == 2 ]]; then
+if [ $# -eq 2 ]; then
     OUTPUTFILE=$2
 fi
 

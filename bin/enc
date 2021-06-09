@@ -33,7 +33,7 @@ fi
 
 # ヘルプ表示
 # ----------------
-if [[ $# -lt 2 ]]; then
+if [ $# -lt 2 ]; then
     echo
     echo "使い方: $0 <github user> <input file> [<output file>]"
     echo
@@ -60,7 +60,7 @@ INPUTFILE=$2
 # 出力ファイル名設定
 # ------------------
 OUTPUTFILE=$2.enc
-if [[ $# == 3 ]]; then
+if [ $# -eq 3 ]; then
     OUTPUTFILE=$3
 fi
 

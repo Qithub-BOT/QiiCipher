@@ -16,7 +16,7 @@
 
 # ヘルプ表示
 # ----------
-if [[ $# -lt 2 ]]; then
+if [ $# -lt 2 ]; then
     echo
     echo "使い方: ${0} <verify file> <github user> [<sign file>]"
     echo
@@ -42,7 +42,7 @@ USERNAME="$2"
 # 出力ファイル名設定
 # ------------------
 SIGNFILE="${1}.sig"
-if [[ $# == 3 ]]; then
+if [ $# -eq 3 ]; then
     SIGNFILE="$3"
 fi
 
