@@ -92,7 +92,7 @@ PATHPUBKEY="/tmp/${USERNAME}.${TMP}.pub"
 # ユーザの GitHub の公開鍵一覧の１行目を取得
 # - 取得先は： https://github.com/<user name>.keys
 # - 参考URL ： https://qiita.com/m0r1/items/af16c41475d493ab6774
-echo -n "${USERNAME} の GitHub 上の公開鍵を取得中 ... "
+printf "%s" "${USERNAME} の GitHub 上の公開鍵を取得中 ... "
 
 if ! curl -s "https://github.com/${USERNAME}.keys" | head -n 1 >"$PATHPUBKEY"; then
     echo >&2 "NG：公開鍵を取得・保存できませんでした。"
@@ -102,7 +102,7 @@ echo "OK"
 
 # 公開鍵のアクセス権変更
 # ------------------
-echo -n "取得した公開鍵のアクセス権を変更中 (0644 -> 0600) ... "
+printf "%s" "取得した公開鍵のアクセス権を変更中 (0644 -> 0600) ... "
 
 if ! chmod 0600 "$PATHPUBKEY"; then
     echo >&2 "NG：ファイルのアクセス権を変更できませんでした。"
@@ -115,7 +115,7 @@ echo "OK"
 # - 参考URL ：
 #   - https://qiita.com/drobune/items/bf5d689eff7f69ed6866
 #   - https://qiita.com/connvoi_tyou/items/3e86b6b68c3f398b3244
-echo -n "RSA 形式の公開鍵を PKCS8 形式に変換中 ... "
+printf "%s" "RSA 形式の公開鍵を PKCS8 形式に変換中 ... "
 
 if ! ssh-keygen -f "$PATHPUBKEY" -e -m pkcs8 >"${PATHPUBKEY}.pkcs8"; then
     echo >&2 "NG：RSA -> PKCS8 変換中にエラーが発生しました。"
@@ -134,7 +134,7 @@ echo "OK"
 #       2048 =  246
 #       4096 =  502
 #       8192 = 1018
-echo -n "公開鍵でファイルを暗号化中 ... "
+printf "%s" "公開鍵でファイルを暗号化中 ... "
 
 if ! openssl rsautl \
     -encrypt \
@@ -149,7 +149,7 @@ echo "OK"
 
 # 一時ファイルの削除
 # ------------------
-echo -n "一時ファイルの削除中 ... "
+printf "%s" "一時ファイルの削除中 ... "
 
 if ! (rm "$PATHPUBKEY" && rm "${PATHPUBKEY}.pkcs8"); then
     echo >&2 "NG：一時ファイルの削除に失敗しました。 '/tmp/' ディレクトリ内を手動で削除してください。"

@@ -42,7 +42,7 @@ fi
 # md5s は md5sum/md5 のラッパー関数です.
 md5s() {
     if type md5sum 1>/dev/null 2>/dev/null; then
-        echo "$1" | md5sum | awk '{ print $1 }'
+        printf "%s" "$1" | md5sum | awk '{ print $1 }'
         return $?
     fi
 
@@ -85,7 +85,7 @@ fi
 
 # ファイルの復号テスト
 # --------------------
-echo -n "- 共通鍵でファイルを復号しています ... "
+printf "%s" "- 共通鍵でファイルを復号しています ... "
 
 if ! openssl enc \
     -d -aes-256-cbc \
