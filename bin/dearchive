@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # AES SHA256 CBC 復号スクリプト (UTF-8)
 # =======================================
