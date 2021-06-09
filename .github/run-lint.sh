@@ -6,7 +6,7 @@
 # -----------------------------------------------------------------------------
 #  Constants
 # -----------------------------------------------------------------------------
-PATH_DIR_REPO="$(dirname "$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)")"
+PATH_DIR_REPO="$(dirname "$(cd "$(dirname "$0")" && pwd)")"
 PATH_DIR_BIN="${PATH_DIR_REPO}/bin"
 PATH_DIR_RETURN="$(cd . && pwd)"
 SUCCESS=0

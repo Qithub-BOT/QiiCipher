@@ -17,7 +17,7 @@
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
 
-PATH_DIR_BIN="$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)"
+PATH_DIR_BIN="$(cd "$(dirname "$0")" && pwd)"
 
 getRandStr() {
     openssl rand -hex 16 2>&1
