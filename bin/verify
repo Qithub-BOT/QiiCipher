@@ -30,20 +30,8 @@ if [[ $# -lt 2 ]]; then
     exit 1
 fi
 
-# md5s は md5sum/md5 のラッパー関数です.
-md5s() {
-    if type md5sum 1>/dev/null 2>/dev/null; then
-        printf "%s" "$1" | md5sum | awk '{ print $1 }'
-        return $?
-    fi
-
-    if type md5 1>/dev/null 2>/dev/null; then
-        md5 -q -s "$1"
-        return $?
-    fi
-
-    echo >&2 'MD5 ハッシュ関数がありません。'
-    exit 1
+getRandStr() {
+    openssl rand -hex 16 2>&1
 }
 
 # コマンド引数取得
@@ -64,7 +52,12 @@ fi
 # - 参考URL ：
 #     https://qiita.com/m-yamashita/items/889c116b92dc0bf4ea7d
 #     https://qiita.com/bsdhack/items/47c9cbb5fd22fcc9597a
-TMPDIR="${TMP:-/tmp}/$(basename "${0}")-$(md5s ${RANDOM})"
+if ! RAND=$(getRandStr); then
+    echo >&2 'OpenSSL によるランダム値の取得に失敗しました。'
+    echo >&2 "エラー内容: ${RAND}"
+    exit 1
+fi
+TMPDIR="${TMP:-/tmp}/$(basename "${0}")-${RAND}"
 mkdir -p "$TMPDIR"
 trap 'rm -r ${TMPDIR}' 0
 

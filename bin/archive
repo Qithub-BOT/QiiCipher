@@ -13,20 +13,8 @@
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
 
-# md5s は md5sum/md5 のラッパー関数です.
-md5s() {
-    if type md5sum 1>/dev/null 2>/dev/null; then
-        printf "%s" "$1" | md5sum | awk '{ print $1 }'
-        return $?
-    fi
-
-    if type md5 1>/dev/null 2>/dev/null; then
-        md5 -q -s "$1"
-        return $?
-    fi
-
-    echo >&2 'MD5 ハッシュ関数がありません。'
-    exit 1
+getRandStr() {
+    openssl rand -hex 16 2>&1
 }
 
 md5f() {
@@ -88,7 +76,11 @@ PASSWORD_PATH="${TEMPDIR}${OUTPUTFILE}.passwd"
 # ----------------
 printf "%s" "- 共通鍵を作成しています ... "
 
-PASSWORD=$(md5s $RANDOM)
+if ! PASSWORD=$(getRandStr); then
+    echo >&2 'OpenSSL によるランダム値の取得に失敗しました。'
+    echo >&2 "エラー内容: ${PASSWORD}"
+    exit 1
+fi
 
 if ! (
     umask 077
