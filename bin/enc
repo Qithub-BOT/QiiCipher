@@ -72,7 +72,7 @@ trap 'rm -rf /tmp/${USERNAME}.*' 0
 
 # 一時ファイル
 # ------------
-if ! RAND=$(getRandStr); then
+if ! RAND="$(getRandStr)"; then
     echo >&2 'OpenSSL によるランダム値の取得に失敗しました。'
     echo >&2 "エラー内容: ${RAND}"
     exit 1

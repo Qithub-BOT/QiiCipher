@@ -76,7 +76,7 @@ PASSWORD_PATH="${TEMPDIR}${OUTPUTFILE}.passwd"
 # ----------------
 printf "%s" "- 共通鍵を作成しています ... "
 
-if ! PASSWORD=$(getRandStr); then
+if ! PASSWORD="$(getRandStr)"; then
     echo >&2 'OpenSSL によるランダム値の取得に失敗しました。'
     echo >&2 "エラー内容: ${PASSWORD}"
     exit 1

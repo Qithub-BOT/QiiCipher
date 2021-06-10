@@ -48,7 +48,7 @@ trap "rm -rf ./sample.*" 0
 
 # サンプル・テキストの作成
 # ------------------------
-if ! SAMPLETEXT=$(getRandStr); then
+if ! SAMPLETEXT="$(getRandStr)"; then
     echo >&2 'OpenSSL によるランダム値の取得に失敗しました。'
     echo >&2 "エラー内容: ${SAMPLETEXT}"
     exit 1
@@ -56,7 +56,7 @@ fi
 
 # サンプル・ファイル名設定
 # ------------------------
-FILENAME=${SAMPLETEXT}
+FILENAME="${SAMPLETEXT}"
 PATHFILE="./sample.${FILENAME}.txt"
 
 # サンプル・ファイルの作成
