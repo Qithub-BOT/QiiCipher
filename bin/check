@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # 軽量ファイルの暗号化・復号確認スクリプト (UTF-8)
 # ================================================
@@ -17,19 +17,15 @@
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
 
-PATH_DIR_BIN="$(cd "$(dirname "${BASH_SOURCE:-$0}")" && pwd)"
+PATH_DIR_BIN="$(cd "$(dirname "$0")" && pwd)"
 
-md5r() {
-    if [ -e md5sum ]; then
-        printf "%s" $RANDOM | md5sum
-    elif [ -e md5 ]; then
-        md5 -q -s $RANDOM
-    fi
+getRandStr() {
+    openssl rand -hex 16 2>&1
 }
 
 # ヘルプ表示
 # ----------
-if [[ $# -lt 2 ]]; then
+if [ $# -lt 2 ]; then
     echo
     echo "使い方: ${0} <github user> <id_rsa>"
     echo
@@ -52,11 +48,15 @@ trap "rm -rf ./sample.*" 0
 
 # サンプル・テキストの作成
 # ------------------------
-SAMPLETEXT=$(md5r)
+if ! SAMPLETEXT="$(getRandStr)"; then
+    echo >&2 'OpenSSL によるランダム値の取得に失敗しました。'
+    echo >&2 "エラー内容: ${SAMPLETEXT}"
+    exit 1
+fi
 
 # サンプル・ファイル名設定
 # ------------------------
-FILENAME=$(md5r)
+FILENAME="${SAMPLETEXT}"
 PATHFILE="./sample.${FILENAME}.txt"
 
 # サンプル・ファイルの作成

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 # 軽量ファイルの復号スクリプト (UTF-8)
 # ====================================
@@ -15,7 +15,7 @@
 
 # ヘルプ表示
 # ----------
-if [[ $# -lt 3 ]]; then
+if [ $# -lt 3 ]; then
     echo
     echo "使い方: $0 <private key> <input file> <output file>"
     echo

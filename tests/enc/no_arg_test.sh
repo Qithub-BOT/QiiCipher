@@ -1,4 +1,4 @@
-#shellcheck shell=bash
+#shellcheck shell=sh
 
 Describe 'enc with no arg'
     It 'should print help with status 1'

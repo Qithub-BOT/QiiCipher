@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 # =============================================================================
 #  軽量ファイルの暗号化スクリプト (UTF-8)
 # =============================================================================
@@ -33,7 +33,7 @@ fi
 
 # ヘルプ表示
 # ----------------
-if [[ $# -lt 2 ]]; then
+if [ $# -lt 2 ]; then
     echo
     echo "使い方: $0 <github user> <input file> [<output file>]"
     echo
@@ -48,20 +48,8 @@ if [[ $# -lt 2 ]]; then
     exit 1
 fi
 
-# md5s は md5sum/md5 のラッパー関数です.
-md5s() {
-    if type md5sum 1>/dev/null 2>/dev/null; then
-        printf "%s" "$1" | md5sum | awk '{ print $1 }'
-        return $?
-    fi
-
-    if type md5 1>/dev/null 2>/dev/null; then
-        md5 -q -s "$1"
-        return $?
-    fi
-
-    echo >&2 'MD5 ハッシュ関数がありません。'
-    exit 1
+getRandStr() {
+    openssl rand -hex 16 2>&1
 }
 
 # コマンド引数取得
@@ -72,7 +60,7 @@ INPUTFILE=$2
 # 出力ファイル名設定
 # ------------------
 OUTPUTFILE=$2.enc
-if [[ $# == 3 ]]; then
+if [ $# -eq 3 ]; then
     OUTPUTFILE=$3
 fi
 
@@ -84,8 +72,12 @@ trap 'rm -rf /tmp/${USERNAME}.*' 0
 
 # 一時ファイル
 # ------------
-TMP=$(md5s $RANDOM)
-PATHPUBKEY="/tmp/${USERNAME}.${TMP}.pub"
+if ! RAND="$(getRandStr)"; then
+    echo >&2 'OpenSSL によるランダム値の取得に失敗しました。'
+    echo >&2 "エラー内容: ${RAND}"
+    exit 1
+fi
+PATHPUBKEY="/tmp/${USERNAME}.${RAND}.pub"
 
 # RSA 公開鍵の取得
 # ----------------
