@@ -5,12 +5,16 @@
 
 # QiiCipher
 
-GitHub 上の公開鍵を使ってファイルの暗号化と署名確認、ローカルの秘密鍵で復号や署名をするシェル・スクリプトです。
+GitHub 上の公開鍵を使ってファイルの暗号化と署名確認、ローカルの秘密鍵で復号や署名をするシェル・スクリプトです。（[POSIX](https://ja.wikipedia.org/wiki/POSIX) 準拠。`bash` `zsh` `bourne shell` などで動作します）
 
-[![参加ポリシー](http://img.shields.io/badge/policy-Qithub%203原則-blue.svg)](https://github.com/Qithub-BOT/Qithub-ORG)
-![日本語ドキュメント](https://img.shields.io/badge/document-ja-brightgreen.svg)
-![日本語コミットメッセージ](https://img.shields.io/badge/Commit%20message-ja-brightgreen.svg)
-![日本語ソース内コメント](https://img.shields.io/badge/code%20comment-ja-brightgreen.svg)
+- 動作 OS
+  - Linux
+  - macOS
+  - Windows 10 + WSL2
+- 必須コマンド
+  - `openssl` コマンド: 暗号化・復号・ランダム値取得などに [OpenSSL](https://ja.wikipedia.org/wiki/OpenSSL) コマンドが必要です。
+  - `ssh-keygen` コマンド: 公開鍵・秘密鍵の作成に必要です。[OpenSSH](https://ja.wikipedia.org/wiki/OpenSSH) と一緒にインストールされますが、インストールされていない場合は `openssh` もしくは `openssh-keygen` などでインストールしてください。
+  - `curl` コマンド: 現在のバージョンは `wget` に対応しておりません。
 
 ---
 
@@ -28,13 +32,15 @@ QiiCipher で使えるコマンドは以下の通りです。
 |署名の確認（Verify）|`verify`|`$ ./verify himitsu.txt KEINOS himitsu.txt.sig`|
 |鍵長の確認（Check Key Length）|`checkkeylength`|`$ ./checkkeylength KEINOS`|
 
-## Usage
+## ダウンロード
 
-- いずれのスクリプトも引数がない場合はヘルプが表示されます。（例：`$ ./enc`でヘルプ表示）
-- 実行前に、ダウンロードしたスクリプト・ファイルのハッシュ値（`SHA512`）と、チェックサムが同じであることを確認してください。
-- 実行権限を与えるのを忘れないでください。（例：`chmod 0744 ./enc`）
-- ダウンロードしたスクリプト・ファイルを別名保存した場合は、各構文内のスクリプト名も置き換えてください。（`enc.sh`としてダウンロードした場合 `$ ./enc` -> `$ ./enc.sh`）
-- 動作確認済み OS と環境はページ下部に記載しています。
+- リポジトリを `clone` するか、[`./bin`](https://github.com/Qithub-BOT/QiiCipher/tree/master/bin) ディレクトリにあるスクリプトをパスの通ったディレクトリに設置してください。
+    - 設置する際に**コマンドに実行権限を与えるのを忘れない**でください。（例：`chmod 0755 ./enc`）
+- いずれのスクリプトも**引数がない場合はヘルプが表示されます**。（例：`$ ./enc`でヘルプ表示）
+
+---
+
+## 各コマンドの詳細
 
 ### 鍵生成スクリプト（`keygen.sh`）
 
@@ -217,6 +223,7 @@ $ ./checkkeylength <github user>
     - `$ openssl version` : `OpenSSL 1.1.1f  31 Mar 2020`
     - `$ ssh -V` : `OpenSSH_8.2p1 Ubuntu-4ubuntu0.2, OpenSSL 1.1.1f  31 Mar 2020`
     - `$ bash --version` : `GNU bash, version 5.0.17(1)-release (x86_64-pc-linux-gnu)`
+
 ---
 
 ## メンテナ
@@ -225,12 +232,4 @@ $ ./checkkeylength <github user>
 
 ## コラボレーション（参加）
 
-Qiita/Qiitadon ユーザーであればどなたでも参加できます。
-
-### Issue
-
-不具合・要望・提案・問い合わせなどは [Qithub-ORG の Issue ページ](https://github.com/Qithub-BOT/Qithub-ORG/issues)にてお願いいたします。
-
-
-
-
+不具合報告、改善提案、PR 方法やルールなどは [CONTRIBUTING.md](./CONTRIBUTING.md) をご覧ください。
