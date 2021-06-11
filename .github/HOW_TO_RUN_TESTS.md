@@ -19,8 +19,7 @@ QiiCipher では、Pull Request されたブランチに `push` があると、�
 
 <kbd>![](https://user-images.githubusercontent.com/11840938/121191980-713f4e80-c8a7-11eb-9f2c-a4ca96ead88a.png)</kbd>
 
-- 【注意 1】自分のリポジトリの `master` に PR（`origin master` への PR）してのテスト実行はお薦めしません。間違えて `master` にマージしてしまうと、本家（`upstream` の `master`）に追随する場合にコンフリクトを起こしやすくなるためです。**`push` するごとにテストを走らせたい**場合は、本家（`upstream` の `master`）に [Draft PR](./.github/HOW_TO_PULL_REQUEST.md#draft-pr-%E3%81%AE%E3%82%B9%E3%82%B9%E3%83%A1) してしまうことをオススメします。
-- 【注意 2】GitHub の無料実行枠を消費します。ローカルで実行するか、[Draft PR](./.github/HOW_TO_PULL_REQUEST.md#draft-pr-%E3%81%AE%E3%82%B9%E3%82%B9%E3%83%A1) してしまうことをオススメします。
+- 【注意】自分のリポジトリの `master` に PR（`origin master` への PR）してのテスト実行はお薦めしません。間違えて `master` にマージしてしまうと、本家（`upstream` の `master`）に追随する場合にコンフリクトを起こしやすくなるためです。**`push` するごとにテストを走らせたい**場合は、本家（`upstream` の `master`）に [Draft PR](./.github/HOW_TO_PULL_REQUEST.md#draft-pr-%E3%81%AE%E3%82%B9%E3%82%B9%E3%83%A1) してしまうことをオススメします。
 
 ## ローカルでの実行方法
 
