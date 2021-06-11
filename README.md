@@ -12,7 +12,9 @@ GitHub 上の公開鍵を使ってファイルの暗号化と署名確認、ロ�
   - macOS
   - Windows 10 + WSL2
 - 必須コマンド
-  - `openssl`: 別途 [OpenSSL](https://ja.wikipedia.org/wiki/OpenSSL) のコマンドのインストールが必要です。
+  - `openssl` コマンド: 暗号化・復号・ランダム値取得などに [OpenSSL](https://ja.wikipedia.org/wiki/OpenSSL) コマンドが必要です。
+  - `ssh-keygen` コマンド: 公開鍵・秘密鍵の作成に必要です。[OpenSSH](https://ja.wikipedia.org/wiki/OpenSSH) と一緒にインストールされますが、インストールされていない場合は `openssh` もしくは `openssh-keygen` などでインストールしてください。
+  - `curl` コマンド: 現在のバージョンは `wget` に対応しておりません。
 
 ---
 
@@ -33,7 +35,7 @@ QiiCipher で使えるコマンドは以下の通りです。
 ## ダウンロード
 
 - リポジトリを `clone` するか、[`./bin`](https://github.com/Qithub-BOT/QiiCipher/tree/master/bin) ディレクトリにあるスクリプトをパスの通ったディレクトリに設置してください。
-    - 設置する際に**コマンドに実行権限を与えるのを忘れない**でください。（例：`chmod 0744 ./enc`）
+    - 設置する際に**コマンドに実行権限を与えるのを忘れない**でください。（例：`chmod 0755 ./enc`）
 - いずれのスクリプトも**引数がない場合はヘルプが表示されます**。（例：`$ ./enc`でヘルプ表示）
 
 ---
