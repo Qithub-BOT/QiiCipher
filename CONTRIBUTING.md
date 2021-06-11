@@ -30,7 +30,7 @@ QiiCipher は、コントリビュータによる、コントリビュータの�
 
 ## PR （Pull Request）について
 
-- PR 先: `main` ブランチ
+- PR 先: `master` ブランチ
 - 詳しくは [HOW_TO_PULL_REQUEST.md](./.github/HOW_TO_PULL_REQUEST.md) をご覧ください。
 
 ## 改善提案・質問について
