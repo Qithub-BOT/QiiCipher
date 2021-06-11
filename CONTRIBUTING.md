@@ -20,7 +20,7 @@ QiiCipher は、コントリビュータによる、コントリビュータの�
 
 [コントリビュータ](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#contributor)とは、改善・改良に貢献してくださっているボランティアの方々のことです。
 
-- [コントリビュータ一覧](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#contributor) | QiiCipher @ GitHub
+- [コントリビュータ一覧](https://github.com/Qithub-BOT/QiiCipher/graphs/contributors) | QiiCipher @ GitHub
 
 そのため、他の人やアプリのユーザがどう思おうとも、コントリビュータ同士が楽しく納得できれば、それで良いというルールです。逆に、楽しくない時や、気分が乗らない時はスルーして休んでください。
 

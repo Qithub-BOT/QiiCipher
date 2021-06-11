@@ -12,11 +12,11 @@ GitHub にアカウントがあり、[Qiita](https://qiita.com/) もしくは [Q
 
 ### コントリビュータになる
 
-QiiCipher のリポジトリで、Discussion / Issue / PR に 1 回でも投稿や参加（コントリビュート）していれば自動的にコントリビュータとなります。
+QiiCipher のリポジトリで、Discussion / Issue / PR に 1 回でも投稿や参加（コントリビュート）していれば自動的に[コントリビュータ](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#contributor)となります。
 
 また、**コントリビュータであれば、誰でもレビューに参加できます**。
 
-- [コントリビュータ一覧](https://docs.github.com/ja/github/getting-started-with-github/quickstart/github-glossary#contributor) | QiiCipher @ GitHub
+- [コントリビュータ一覧](https://github.com/Qithub-BOT/QiiCipher/graphs/contributors) | QiiCipher @ GitHub
 
 ### コラボレータになる
 
