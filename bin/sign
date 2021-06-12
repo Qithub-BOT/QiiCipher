@@ -36,6 +36,19 @@ getRandStr() {
     openssl rand -hex 16 2>&1
 }
 
+catURL() {
+    if type curl 1>/dev/null 2>/dev/null; then
+        curl -s "$1"
+    elif type wget 1>/dev/null 2>/dev/null; then
+        wget -nv -O - "$1"
+    elif type fetch 1>/dev/null 2>/dev/null; then
+        fetch -q -o - "$1"
+    else
+        echo >&2 'データ取得に必要なコマンド(curl/wget/fetch)がインストールされていません。'
+        exit 1
+    fi
+}
+
 # コマンド引数取得
 # ----------------
 USERNAME=$1
@@ -93,7 +106,7 @@ PATHPUBKEY="/tmp/${USERNAME}.${RAND}.pub"
 # - 参考URL ： https://qiita.com/m0r1/items/af16c41475d493ab6774
 printf "%s" "${USERNAME} の GitHub 上の公開鍵を取得中 ... "
 
-if ! curl -s "https://github.com/${USERNAME}.keys" | head -n 1 >"$PATHPUBKEY"; then
+if ! catURL "https://github.com/${USERNAME}.keys" | head -n 1 >"$PATHPUBKEY"; then
     echo "NG：公開鍵を取得・保存できませんでした。"
     exit 1
 fi

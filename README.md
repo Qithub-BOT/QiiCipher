@@ -14,7 +14,7 @@ GitHub 上の公開鍵を使ってファイルの暗号化と署名確認、ロ�
 - 必須コマンド
   - `openssl` コマンド: 暗号化・復号・ランダム値取得などに [OpenSSL](https://ja.wikipedia.org/wiki/OpenSSL) コマンドが必要です。
   - `ssh-keygen` コマンド: 公開鍵・秘密鍵の作成に必要です。[OpenSSH](https://ja.wikipedia.org/wiki/OpenSSH) と一緒にインストールされますが、インストールされていない場合は `openssh` もしくは `openssh-keygen` などでインストールしてください。
-  - `curl` コマンド: 現在のバージョンは `wget` に対応しておりません。
+  - コンテンツ取得コマンド: 現在のバージョンでは `curl` `wget` `fetch` のいずれかが必要です。
 
 ---
 
