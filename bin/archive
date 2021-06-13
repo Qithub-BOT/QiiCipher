@@ -87,7 +87,6 @@ ARCHIVE_PATH="${TEMPDIR}${OUTPUTFILE}"
 PASSWORD_PATH="${TEMPDIR}${OUTPUTFILE}.passwd"
 TEMPFILE="$(basename "$INPUTFILE").tar.gz"
 
-
 # パスワードの生成
 # ----------------
 printf "%s" "- 共通鍵を作成しています ... "
@@ -117,7 +116,7 @@ if ! tar -C "$(dirname "$INPUTFILE")" -czf "${TEMPDIR}${TEMPFILE}" "$(basename "
     echo >&2 "NG：ファイルを圧縮できませんでした。"
     exit 1
 fi
-if ! openssl enc -e -aes-256-cbc -salt -k "$PASSWORD" -out "${ARCHIVE_PATH}" < "${TEMPDIR}${TEMPFILE}"; then
+if ! openssl enc -e -aes-256-cbc -salt -k "$PASSWORD" -out "${ARCHIVE_PATH}" <"${TEMPDIR}${TEMPFILE}"; then
     echo >&2 "NG：ファイルを暗号化できませんでした。"
     exit 1
 fi
