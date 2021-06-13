@@ -85,6 +85,8 @@ echo "OK"
 
 ARCHIVE_PATH="${TEMPDIR}${OUTPUTFILE}"
 PASSWORD_PATH="${TEMPDIR}${OUTPUTFILE}.passwd"
+TEMPFILE="$(basename "$INPUTFILE").tar.gz"
+
 
 # パスワードの生成
 # ----------------
@@ -111,8 +113,12 @@ echo "OK"
 # - 参考文献：https://qiita.com/kite_999/items/cc39179463fd061b2e7d
 printf "%s" "- ファイルを TAR/GZIP 圧縮 → AES 暗号化します ... "
 
-if ! (tar -C "$(dirname "$INPUTFILE")" -cz "$(basename "$INPUTFILE")" | openssl enc -e -aes-256-cbc -salt -k "$PASSWORD" -out "${ARCHIVE_PATH}"); then
-    echo >&2 "NG：ファイルを圧縮・暗号化できませんでした。"
+if ! tar -C "$(dirname "$INPUTFILE")" -czf "${TEMPDIR}${TEMPFILE}" "$(basename "$INPUTFILE")"; then
+    echo >&2 "NG：ファイルを圧縮できませんでした。"
+    exit 1
+fi
+if ! openssl enc -e -aes-256-cbc -salt -k "$PASSWORD" -out "${ARCHIVE_PATH}" < "${TEMPDIR}${TEMPFILE}"; then
+    echo >&2 "NG：ファイルを暗号化できませんでした。"
     exit 1
 fi
 echo "OK"
@@ -138,8 +144,6 @@ echo "OK"
 # ファイルの復号テスト
 # --------------------
 printf "%s" "- 共通鍵でファイルを復号しています ... "
-
-TEMPFILE="$(basename "$INPUTFILE").tar.gz"
 
 if ! openssl enc \
     -d -aes-256-cbc \
@@ -180,7 +184,7 @@ fi
 # ------------------
 printf "%s" "- 作業ファイルの削除をしています ... "
 
-if ! (rm -f "$TEMPDIR$TEMPFILE" && rm -f "$TEMPDIR$(basename "$INPUTFILE")"); then
+if ! (rm -f "$TEMPDIR$TEMPFILE" "$TEMPDIR$(basename "$INPUTFILE")"); then
     echo >&2 "NG：作業ファイルを削除できませんでした。"
     exit 1
 fi
