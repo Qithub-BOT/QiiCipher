@@ -73,6 +73,10 @@ if [ ! -r "$PRIVATEKEY" ]; then
     echo >&2 "秘密鍵ファイル ${PRIVATEKEY} が見つかりません。"
     exit 1
 fi
+if ! openssl rsa -in "${PRIVATEKEY}" -text >/dev/null 2>/dev/null; then
+    echo >&2 "秘密鍵ファイル ${PRIVATEKEY} がサポートしていないフォーマットです。"
+    exit 1
+fi
 
 if [ ! -r "$INPUTFILE" ]; then
     echo >&2 "署名したいファイル ${INPUTFILE} が見つかりません。"
@@ -134,6 +138,10 @@ list_keys="$(catURL "https://github.com/${USERNAME}.keys")" || {
     echo >&2 "NG：公開鍵を取得できませんでした。"
     exit 1
 }
+if [ -z "$list_keys" ]; then
+    echo >&2 "NG：公開鍵が存在しませんでした"
+    exit 1
+fi
 echo "$list_keys" | head -n 1 >"$PATHPUBKEY" || {
     echo >&2 "NG：公開鍵を保存できませんでした。"
     exit 1

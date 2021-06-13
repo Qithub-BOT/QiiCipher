@@ -53,6 +53,10 @@ if [ ! -r "$SECRETKEY" ]; then
     echo >&2 "秘密鍵ファイル ${SECRETKEY} が見つかりません。"
     exit 1
 fi
+if ! openssl rsa -in "${SECRETKEY}" -text >/dev/null 2>/dev/null; then
+    echo >&2 "秘密鍵ファイル ${SECRETKEY} がサポートしていないフォーマットです。"
+    exit 1
+fi
 
 # trap の設定
 # -----------

@@ -69,9 +69,15 @@ if [ ! -r "$PASSWORDFILE" ]; then
     exit 1
 fi
 
-if [ -n "$PRIVATEKEYFILE" ] && [ ! -r "$PRIVATEKEYFILE" ]; then
-    echo >&2 "秘密鍵ファイル ${PRIVATEKEYFILE} が見つかりません。"
-    exit 1
+if [ -n "$PRIVATEKEYFILE" ]; then
+    if [ ! -r "$PRIVATEKEYFILE" ]; then
+        echo >&2 "秘密鍵ファイル ${PRIVATEKEYFILE} が見つかりません。"
+        exit 1
+    fi
+    if ! openssl rsa -in "${PRIVATEKEYFILE}" -text >/dev/null 2>/dev/null; then
+        echo >&2 "秘密鍵ファイル ${PRIVATEKEYFILE} がサポートしていないフォーマットです。"
+        exit 1
+    fi
 fi
 
 # 一時ファイル

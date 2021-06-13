@@ -87,6 +87,10 @@ list_keys="$(catURL "https://github.com/${USERNAME}.keys")" || {
     echo >&2 "NG：公開鍵を取得できませんでした。"
     exit 1
 }
+if [ -z "$list_keys" ]; then
+    echo >&2 "NG：公開鍵が存在しませんでした"
+    exit 1
+fi
 echo "$list_keys" | head -n 1 >"$PATHPUBKEY" || {
     echo >&2 "NG：公開鍵を保存できませんでした。"
     exit 1
