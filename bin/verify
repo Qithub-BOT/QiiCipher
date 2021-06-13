@@ -14,6 +14,20 @@
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
 
+# -----------------------------------------------------------------------------
+#  Requirement check
+# -----------------------------------------------------------------------------
+if ! type openssl 2>/dev/null 1>/dev/null; then
+    echo >&2 '署名検証に必要な openssl コマンドがインストールされていません。'
+
+    exit 1
+fi
+if ! type ssh-keygen 2>/dev/null 1>/dev/null; then
+    echo >&2 'ssh-keygen コマンド(openssh)がインストールされていません。'
+
+    exit 1
+fi
+
 # ヘルプ表示
 # ----------
 if [ $# -lt 2 ]; then
@@ -36,7 +50,7 @@ getRandStr() {
 
 catURL() {
     if type curl 1>/dev/null 2>/dev/null; then
-        curl -s "$1"
+        curl --fail -s "$1"
     elif type wget 1>/dev/null 2>/dev/null; then
         wget -nv -O - "$1"
     elif type fetch 1>/dev/null 2>/dev/null; then
@@ -57,6 +71,16 @@ USERNAME="$2"
 SIGNFILE="${1}.sig"
 if [ $# -eq 3 ]; then
     SIGNFILE="$3"
+fi
+
+if [ ! -r "$VERIFYFILE" ]; then
+    echo >&2 "確認したいファイル ${VERIFYFILE} が見つかりません。"
+    exit 1
+fi
+
+if [ ! -r "$SIGNFILE" ]; then
+    echo >&2 "電子署名ファイル ${SIGNFILE} が見つかりません。"
+    exit 1
 fi
 
 # trap の設定
@@ -91,10 +115,14 @@ PATHPUBKEY="${TMPDIR}/${USERNAME}.pub"
 # - 参考URL ： https://qiita.com/m0r1/items/af16c41475d493ab6774
 printf "%s" "- ${USERNAME} の GitHub 上の公開鍵を取得中 ... "
 
-if ! catURL "https://github.com/${USERNAME}.keys" | head -n 1 >"$PATHPUBKEY"; then
-    echo "NG：公開鍵を取得・保存できませんでした。"
+list_keys="$(catURL "https://github.com/${USERNAME}.keys")" || {
+    echo >&2 "NG：公開鍵を取得できませんでした。"
     exit 1
-fi
+}
+echo "$list_keys" | head -n 1 >"$PATHPUBKEY" || {
+    echo >&2 "NG：公開鍵を保存できませんでした。"
+    exit 1
+}
 echo "OK"
 
 # 公開鍵のフォーマット変換
@@ -105,7 +133,7 @@ echo "OK"
 printf "%s" "- RSA 形式の公開鍵を PKCS8 形式に変換中 ... "
 
 if ! ssh-keygen -f "$PATHPUBKEY" -e -m pkcs8 >"${PATHPUBKEY}.pkcs8"; then
-    echo "NG：RSA -> PKCS8 変換中にエラーが発生しました。"
+    echo >&2 "NG：RSA -> PKCS8 変換中にエラーが発生しました。"
     exit 1
 fi
 echo "OK"

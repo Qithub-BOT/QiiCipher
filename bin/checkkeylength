@@ -14,6 +14,20 @@
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
 
+# -----------------------------------------------------------------------------
+#  Requirement check
+# -----------------------------------------------------------------------------
+if ! type openssl 2>/dev/null 1>/dev/null; then
+    echo >&2 'openssl コマンドがインストールされていません。'
+
+    exit 1
+fi
+if ! type ssh-keygen 2>/dev/null 1>/dev/null; then
+    echo >&2 'ssh-keygen コマンド(openssh)がインストールされていません。'
+
+    exit 1
+fi
+
 # ヘルプ表示
 # ----------
 if [ $# -lt 1 ]; then
@@ -31,7 +45,7 @@ getRandStr() {
 
 catURL() {
     if type curl 1>/dev/null 2>/dev/null; then
-        curl -s "$1"
+        curl --fail -s "$1"
     elif type wget 1>/dev/null 2>/dev/null; then
         wget -nv -O - "$1"
     elif type fetch 1>/dev/null 2>/dev/null; then
@@ -44,7 +58,7 @@ catURL() {
 
 # コマンド引数取得
 # ----------------
-USERNAME=$1
+USERNAME="$1"
 
 # trap の設定
 # -----------
@@ -69,10 +83,14 @@ PATHPUBKEY="/tmp/${USERNAME}.${RAND}.pub"
 # - 参考URL ： https://qiita.com/m0r1/items/af16c41475d493ab6774
 printf "%s" "${USERNAME} の GitHub 上の公開鍵を取得中 ... "
 
-if ! catURL "https://github.com/${USERNAME}.keys" | head -n 1 >"$PATHPUBKEY"; then
-    echo "NG：公開鍵を取得・保存できませんでした。"
+list_keys="$(catURL "https://github.com/${USERNAME}.keys")" || {
+    echo >&2 "NG：公開鍵を取得できませんでした。"
     exit 1
-fi
+}
+echo "$list_keys" | head -n 1 >"$PATHPUBKEY" || {
+    echo >&2 "NG：公開鍵を保存できませんでした。"
+    exit 1
+}
 echo "OK"
 
 # RSA公開鍵の鍵長を表示

@@ -19,6 +19,15 @@
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
 
+# -----------------------------------------------------------------------------
+#  Requirement check
+# -----------------------------------------------------------------------------
+if ! type openssl 2>/dev/null 1>/dev/null; then
+    echo >&2 '復号化に必要な openssl コマンドがインストールされていません。'
+
+    exit 1
+fi
+
 # ヘルプ表示
 # ----------
 if [ $# -lt 3 ]; then
@@ -45,10 +54,25 @@ getRandStr() {
 
 # コマンド引数取得
 # ----------------
-INPUTFILE=$1
-OUTPUTPATH=$2
-PASSWORDFILE=$3
-PRIVATEKEYFILE=$4
+INPUTFILE="$1"
+OUTPUTPATH="$2"
+PASSWORDFILE="$3"
+PRIVATEKEYFILE="$4"
+
+if [ ! -r "$INPUTFILE" ]; then
+    echo >&2 "復号＆解凍したいファイル ${INPUTFILE} が見つかりません。"
+    exit 1
+fi
+
+if [ ! -r "$PASSWORDFILE" ]; then
+    echo >&2 "パスワードファイル ${PASSWORDFILE} が見つかりません。"
+    exit 1
+fi
+
+if [ -n "$PRIVATEKEYFILE" ] && [ ! -r "$PRIVATEKEYFILE" ]; then
+    echo >&2 "秘密鍵ファイル ${PRIVATEKEYFILE} が見つかりません。"
+    exit 1
+fi
 
 # 一時ファイル
 # ------------
@@ -69,7 +93,15 @@ trap "rm -rf /tmp/QiiCipher_${RAND}"'.*' 0
 # --------------------
 if [ -n "$PRIVATEKEYFILE" ]; then
     PATH_DIR_BIN="$(cd "$(dirname "$0")" && pwd)"
-    "${PATH_DIR_BIN}"/dec "$PRIVATEKEYFILE" "$PASSWORDFILE" "$DECRYPTED_PASSWORDFILE"
+    if ! RESULT=$("${PATH_DIR_BIN}"/dec "$PRIVATEKEYFILE" "$PASSWORDFILE" "$DECRYPTED_PASSWORDFILE" 2>&1); then
+        echo >&2 "NG：パスワードファイルを復号できませんでした。"
+        echo >&2
+        echo >&2 "Error(dec):"
+        echo >&2 "${RESULT}"
+        exit 1
+    else
+        echo "${RESULT}"
+    fi
     PASSWORD=$(cat "${DECRYPTED_PASSWORDFILE}")
 else
     PASSWORD=$(cat "${PASSWORDFILE}")
@@ -85,7 +117,7 @@ if ! openssl enc \
     -k "$PASSWORD" \
     -in "${INPUTFILE}" \
     -out "${TEMPFILE}"; then
-    echo "NG：ファイルを復号できませんでした。"
+    echo >&2 "NG：ファイルを復号できませんでした。"
     exit 1
 fi
 

@@ -17,6 +17,15 @@
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
 
+# -----------------------------------------------------------------------------
+#  Requirement check
+# -----------------------------------------------------------------------------
+if ! type openssl 2>/dev/null 1>/dev/null; then
+    echo >&2 '暗号化に必要な openssl コマンドがインストールされていません。'
+
+    exit 1
+fi
+
 PATH_DIR_BIN="$(cd "$(dirname "$0")" && pwd)"
 
 getRandStr() {
@@ -37,8 +46,13 @@ fi
 
 # コマンド引数取得
 # ----------------
-USERNAME=$1
-SECRETKEY=$2
+USERNAME="$1"
+SECRETKEY="$2"
+
+if [ ! -r "$SECRETKEY" ]; then
+    echo >&2 "秘密鍵ファイル ${SECRETKEY} が見つかりません。"
+    exit 1
+fi
 
 # trap の設定
 # -----------
@@ -64,8 +78,8 @@ PATHFILE="./sample.${FILENAME}.txt"
 printf "%s" "サンプル・ファイルを作成しています ... "
 
 if ! echo "$SAMPLETEXT" >"$PATHFILE"; then
-    echo "NG：サンプル・ファイルの作成に失敗しました。"
-    echo "サンプル・ファイル名： ${PATHFILE}"
+    echo >&2 "NG：サンプル・ファイルの作成に失敗しました。"
+    echo >&2 "サンプル・ファイル名： ${PATHFILE}"
     exit 1
 fi
 echo "OK"
@@ -75,8 +89,11 @@ echo "OK"
 printf "%s" "サンプル・ファイルを暗号化しています ... "
 
 if ! RESULT=$("$PATH_DIR_BIN"/enc "$USERNAME" "$PATHFILE" 2>&1); then
-    echo "NG：サンプル・ファイルの暗号化に失敗しました。"
-    echo "スクリプトの実行権限、ディレクトリの書き込み権限などを確認ください。"
+    echo >&2 "NG：サンプル・ファイルの暗号化に失敗しました。"
+    echo >&2 "スクリプトの実行権限、ディレクトリの書き込み権限などを確認ください。"
+    echo >&2
+    echo >&2 "Error(enc):"
+    echo >&2 "${RESULT}"
     exit 1
 fi
 echo "OK"
@@ -86,9 +103,11 @@ echo "OK"
 printf "%s" "暗号ファイルを復号しています ... "
 
 if ! RESULT=$("$PATH_DIR_BIN"/dec "$SECRETKEY" "${PATHFILE}.enc" "${PATHFILE}.dec" 2>&1); then
-    echo "NG：暗号ファイルの復号中にエラーが発生しました。"
-    echo "スクリプトの実行権限、ディレクトリの書き込み権限などを確認ください。"
-    echo "Error: ${RESULT}"
+    echo >&2 "NG：暗号ファイルの復号中にエラーが発生しました。"
+    echo >&2 "スクリプトの実行権限、ディレクトリの書き込み権限などを確認ください。"
+    echo >&2
+    echo >&2 "Error(dec):"
+    echo >&2 "${RESULT}"
     exit 1
 fi
 echo "OK"
@@ -98,13 +117,13 @@ echo "OK"
 printf "%s" "オリジナルと復号ファイルを比較しています ... "
 
 if ! diff "$PATHFILE" "${PATHFILE}.dec"; then
-    echo "NG：オリジナルと復号されたファイルが異なります。"
-    echo "オリジナル："
-    cat "${PATHFILE}"
-    echo
-    echo "復号："
-    cat "${PATHFILE}.dec"
-    echo
+    echo >&2 "NG：オリジナルと復号されたファイルが異なります。"
+    echo >&2 "オリジナル："
+    cat "${PATHFILE}" >&2
+    echo >&2
+    echo >&2 "復号："
+    cat "${PATHFILE}.dec" >&2
+    echo >&2
     exit 1
 fi
 echo "OK"
@@ -114,8 +133,8 @@ echo "OK"
 printf "%s" "サンプル・ファイルの削除中 ... "
 
 if ! (rm "$PATHFILE" && rm "${PATHFILE}.enc"); then
-    echo "NG：一時ファイルの削除に失敗しました。 手動で削除してください。"
-    echo "ファイル名： ${PATHFILE}"
+    echo >&2 "NG：一時ファイルの削除に失敗しました。 手動で削除してください。"
+    echo >&2 "ファイル名： ${PATHFILE}"
     exit 1
 fi
 echo "OK"

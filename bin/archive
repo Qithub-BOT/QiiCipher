@@ -13,6 +13,15 @@
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
 
+# -----------------------------------------------------------------------------
+#  Requirement check
+# -----------------------------------------------------------------------------
+if ! type openssl 2>/dev/null 1>/dev/null; then
+    echo >&2 '暗号化に必要な openssl コマンドがインストールされていません。'
+
+    exit 1
+fi
+
 getRandStr() {
     openssl rand -hex 16 2>&1
 }
@@ -47,7 +56,12 @@ fi
 
 # コマンド引数取得
 # ----------------
-INPUTFILE=$1
+INPUTFILE="$1"
+
+if [ ! -r "$INPUTFILE" ]; then
+    echo >&2 "圧縮＆暗号化したいファイル ${INPUTFILE} が見つかりません。"
+    exit 1
+fi
 
 # 出力ファイル名設定
 # ------------------
@@ -63,8 +77,8 @@ printf "%s" "- アーカイブ用ディレクトリを作成しています ... 
 TEMPDIR="./$(basename "$INPUTFILE")-archive/"
 
 if ! mkdir -p "$TEMPDIR"; then
-    echo "NG：ディレクトリを作成できませんでした。"
-    echo "- 書き込み権限などを確認してください。"
+    echo >&2 "NG：ディレクトリを作成できませんでした。"
+    echo >&2 "- 書き込み権限などを確認してください。"
     exit 1
 fi
 echo "OK"
@@ -86,8 +100,8 @@ if ! (
     umask 077
     echo "$PASSWORD" >"${PASSWORD_PATH}"
 ); then
-    echo "NG：ファイルを作成できませんでした。"
-    echo "書き込み権限などを確認してください。"
+    echo >&2 "NG：ファイルを作成できませんでした。"
+    echo >&2 "書き込み権限などを確認してください。"
     exit 1
 fi
 echo "OK"
@@ -98,7 +112,7 @@ echo "OK"
 printf "%s" "- ファイルを TAR/GZIP 圧縮 → AES 暗号化します ... "
 
 if ! (tar -C "$(dirname "$INPUTFILE")" -cz "$(basename "$INPUTFILE")" | openssl enc -e -aes-256-cbc -salt -k "$PASSWORD" -out "${ARCHIVE_PATH}"); then
-    echo "NG：ファイルを圧縮・暗号化できませんでした。"
+    echo >&2 "NG：ファイルを圧縮・暗号化できませんでした。"
     exit 1
 fi
 echo "OK"
@@ -116,7 +130,7 @@ echo
 printf "%s" "- 共通鍵を読み込んでいます ... "
 
 if ! PASSWORD=$(cat "${PASSWORD_PATH}"); then
-    echo "NG：共通鍵を読み込めませんでした。"
+    echo >&2 "NG：共通鍵を読み込めませんでした。"
     exit 1
 fi
 echo "OK"
@@ -133,7 +147,7 @@ if ! openssl enc \
     -k "$PASSWORD" \
     -in "${ARCHIVE_PATH}" \
     -out "${TEMPDIR}${TEMPFILE}"; then
-    echo "NG：ファイルを復号できませんでした。"
+    echo >&2 "NG：ファイルを復号できませんでした。"
     exit 1
 fi
 echo "OK"
@@ -143,7 +157,7 @@ echo "OK"
 printf "%s" "- 復号された圧縮ファイルの解凍をしています ... "
 
 if ! tar -C "$TEMPDIR" -xf "$TEMPDIR$TEMPFILE"; then
-    echo "NG：ファイルを解凍できませんでした。"
+    echo >&2 "NG：ファイルを解凍できませんでした。"
     exit 1
 fi
 echo "OK"
@@ -158,7 +172,7 @@ HASHARCHIVED=$(md5f "$TEMPDIR$(basename "$INPUTFILE")")
 if [ "$HASHORIGINAL" = "$HASHARCHIVED" ]; then
     echo "OK"
 else
-    echo "NG ハッシュ値が一致しません"
+    echo >&2 "NG ハッシュ値が一致しません"
     exit 1
 fi
 
@@ -167,7 +181,7 @@ fi
 printf "%s" "- 作業ファイルの削除をしています ... "
 
 if ! (rm -f "$TEMPDIR$TEMPFILE" && rm -f "$TEMPDIR$(basename "$INPUTFILE")"); then
-    echo "NG：作業ファイルを削除できませんでした。"
+    echo >&2 "NG：作業ファイルを削除できませんでした。"
     exit 1
 fi
 echo "OK"

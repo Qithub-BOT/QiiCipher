@@ -20,6 +20,11 @@ if ! type openssl 2>/dev/null 1>/dev/null; then
 
     exit 1
 fi
+if ! type ssh-keygen 2>/dev/null 1>/dev/null; then
+    echo >&2 'ssh-keygen コマンド(openssh)がインストールされていません。'
+
+    exit 1
+fi
 
 # -----------------------------------------------------------------------------
 #  Main
@@ -48,7 +53,7 @@ getRandStr() {
 
 catURL() {
     if type curl 1>/dev/null 2>/dev/null; then
-        curl -s "$1"
+        curl --fail -s "$1"
     elif type wget 1>/dev/null 2>/dev/null; then
         wget -nv -O - "$1"
     elif type fetch 1>/dev/null 2>/dev/null; then
@@ -61,12 +66,17 @@ catURL() {
 
 # コマンド引数取得
 # ----------------
-USERNAME=$1
-INPUTFILE=$2
+USERNAME="$1"
+INPUTFILE="$2"
+
+if [ ! -r "$INPUTFILE" ]; then
+    echo >&2 "暗号化したいファイル ${INPUTFILE} が見つかりません。"
+    exit 1
+fi
 
 # 出力ファイル名設定
 # ------------------
-OUTPUTFILE=$2.enc
+OUTPUTFILE="$2.enc"
 if [ $# -eq 3 ]; then
     OUTPUTFILE=$3
 fi
@@ -93,10 +103,14 @@ PATHPUBKEY="/tmp/${USERNAME}.${RAND}.pub"
 # - 参考URL ： https://qiita.com/m0r1/items/af16c41475d493ab6774
 printf "%s" "${USERNAME} の GitHub 上の公開鍵を取得中 ... "
 
-if ! catURL "https://github.com/${USERNAME}.keys" | head -n 1 >"$PATHPUBKEY"; then
-    echo >&2 "NG：公開鍵を取得・保存できませんでした。"
+list_keys="$(catURL "https://github.com/${USERNAME}.keys")" || {
+    echo >&2 "NG：公開鍵を取得できませんでした。"
     exit 1
-fi
+}
+echo "$list_keys" | head -n 1 >"$PATHPUBKEY" || {
+    echo >&2 "NG：公開鍵を保存できませんでした。"
+    exit 1
+}
 echo "OK"
 
 # 公開鍵のアクセス権変更
