@@ -1,8 +1,8 @@
 #shellcheck shell=sh
 
-Describe 'sign without required'
+Describe 'sign without required command'
 
-    It 'not installed openssl'
+    It 'should print error openssl is missing and exit with status non-zero'
 
 # mock for built-in command
 type() {
@@ -21,7 +21,7 @@ type() {
         The status should be failure
     End
 
-    It 'not installed openssh'
+    It 'should print error ssh-keygen is missing and exit with status non-zero'
 
 # mock for built-in command
 type() {

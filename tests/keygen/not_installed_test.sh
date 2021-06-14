@@ -1,8 +1,8 @@
 #shellcheck shell=sh
 
-Describe 'keygen without required'
+Describe 'keygen without openssl installed'
 
-    It 'not installed openssh'
+    It 'should print error and exit with status non-zero'
 
 # mock for built-in command
 type() {

@@ -1,8 +1,8 @@
 #shellcheck shell=sh
 
-Describe 'enc without required'
+Describe 'enc without required command'
 
-    It 'not installed openssl'
+    It 'should print error openssl is missing and exit with status non-zero'
 
 # mock for built-in command
 type() {
@@ -20,7 +20,7 @@ type() {
         The status should be failure
     End
 
-    It 'not installed openssh'
+    It 'should print error ssh-keygen is missing and exit with status non-zero'
 
 # mock for built-in command
 type() {
