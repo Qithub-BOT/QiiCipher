@@ -74,8 +74,11 @@ if [ -n "$PRIVATEKEYFILE" ]; then
         echo >&2 "秘密鍵ファイル ${PRIVATEKEYFILE} が見つかりません。"
         exit 1
     fi
-    if ! openssl rsa -in "${PRIVATEKEYFILE}" -text >/dev/null 2>/dev/null; then
+    if ! RESULT="$(openssl rsa -in "${PRIVATEKEYFILE}" -text 2>&1 >/dev/null)"; then
         echo >&2 "秘密鍵ファイル ${PRIVATEKEYFILE} がサポートしていないフォーマットです。"
+        echo >&2
+        echo >&2 "Error(openssl)"
+        echo >&2 "$RESULT"
         exit 1
     fi
 fi
