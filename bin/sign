@@ -15,6 +15,20 @@
 # - 注意：利用前にスクリプトに実行権限を与えるのを忘れないでください。
 #
 
+# -----------------------------------------------------------------------------
+#  Requirement check
+# -----------------------------------------------------------------------------
+if ! type openssl 2>/dev/null 1>/dev/null; then
+    echo >&2 '署名に必要な openssl コマンドがインストールされていません。'
+
+    exit 1
+fi
+if ! type ssh-keygen 2>/dev/null 1>/dev/null; then
+    echo >&2 'ssh-keygen コマンド(openssh)がインストールされていません。'
+
+    exit 1
+fi
+
 # ヘルプ表示
 # ----------
 if [ $# -lt 2 ]; then
@@ -38,7 +52,7 @@ getRandStr() {
 
 catURL() {
     if type curl 1>/dev/null 2>/dev/null; then
-        curl -s "$1"
+        curl --fail -s "$1"
     elif type wget 1>/dev/null 2>/dev/null; then
         wget -nv -O - "$1"
     elif type fetch 1>/dev/null 2>/dev/null; then
@@ -51,15 +65,32 @@ catURL() {
 
 # コマンド引数取得
 # ----------------
-USERNAME=$1
-PRIVATEKEY=$2
-INPUTFILE=$3
+USERNAME="$1"
+PRIVATEKEY="$2"
+INPUTFILE="$3"
+
+if [ ! -r "$PRIVATEKEY" ]; then
+    echo >&2 "秘密鍵ファイル ${PRIVATEKEY} が見つかりません。"
+    exit 1
+fi
+if ! RESULT="$(openssl rsa -in "${PRIVATEKEY}" -text 2>&1 >/dev/null)"; then
+    echo >&2 "秘密鍵ファイル ${PRIVATEKEY} がサポートしていないフォーマットです。"
+    echo >&2
+    echo >&2 "Error(openssl)"
+    echo >&2 "$RESULT"
+    exit 1
+fi
+
+if [ ! -r "$INPUTFILE" ]; then
+    echo >&2 "署名したいファイル ${INPUTFILE} が見つかりません。"
+    exit 1
+fi
 
 # 出力ファイル名設定
 # ------------------
 OUTPUTFILE="${3}.sig"
 if [ $# -eq 4 ]; then
-    OUTPUTFILE=$4
+    OUTPUTFILE="$4"
 fi
 
 # trap の設定
@@ -76,7 +107,7 @@ printf "%s" "ファイル ${INPUTFILE} の署名ファイルを生成中 ... "
 if ! openssl dgst -sha1 \
     -sign "$PRIVATEKEY" \
     "$INPUTFILE" >"$OUTPUTFILE"; then
-    echo "NG：署名ファイルを生成できませんでした。"
+    echo >&2 "NG：署名ファイルを生成できませんでした。"
     rm -f "$OUTPUTFILE"
     exit 1
 fi
@@ -106,10 +137,18 @@ PATHPUBKEY="/tmp/${USERNAME}.${RAND}.pub"
 # - 参考URL ： https://qiita.com/m0r1/items/af16c41475d493ab6774
 printf "%s" "${USERNAME} の GitHub 上の公開鍵を取得中 ... "
 
-if ! catURL "https://github.com/${USERNAME}.keys" | head -n 1 >"$PATHPUBKEY"; then
-    echo "NG：公開鍵を取得・保存できませんでした。"
+list_keys="$(catURL "https://github.com/${USERNAME}.keys")" || {
+    echo >&2 "NG：公開鍵を取得できませんでした。"
+    exit 1
+}
+if [ -z "$list_keys" ]; then
+    echo >&2 "NG：公開鍵が存在しませんでした"
     exit 1
 fi
+echo "$list_keys" | head -n 1 >"$PATHPUBKEY" || {
+    echo >&2 "NG：公開鍵を保存できませんでした。"
+    exit 1
+}
 echo "OK"
 
 # 公開鍵のフォーマット変換
@@ -120,7 +159,7 @@ echo "OK"
 printf "%s" "RSA 形式の公開鍵を PKCS8 形式に変換中 ... "
 
 if ! ssh-keygen -f "$PATHPUBKEY" -e -m pkcs8 >"${PATHPUBKEY}.pkcs8"; then
-    echo "NG：RSA -> PKCS8 変換中にエラーが発生しました。"
+    echo >&2 "NG：RSA -> PKCS8 変換中にエラーが発生しました。"
     exit 1
 fi
 echo "OK"
@@ -135,7 +174,7 @@ if ! openssl dgst \
     -verify "${PATHPUBKEY}.pkcs8" \
     -signature "${OUTPUTFILE}" \
     "${INPUTFILE}"; then
-    echo "NG：署名ファイルを検証できませんでした。"
+    echo >&2 "NG：署名ファイルを検証できませんでした。"
     exit 1
 fi
 
