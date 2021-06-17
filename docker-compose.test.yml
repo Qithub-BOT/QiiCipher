@@ -1,8 +1,3 @@
 # Test for Docker Cloud Automated Build
 sut:
   build: .
-  volumes:
-    # Mount test file
-    - ./run-test_docker-cloud.sh:/app/run-test.sh
-  # Run the mounted test file inside a container from the built image
-  entrypoint: enc --help
