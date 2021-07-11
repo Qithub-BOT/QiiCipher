@@ -11,4 +11,7 @@ RUN apk add --no-cache \
 
 USER vscode
 
-RUN sh -c 'wget -O- https://git.io/shellspec | sh -s -- --yes'
+RUN \
+        # ShellSpec のインストール
+        sh -c 'wget -O- https://git.io/shellspec | sh -s -- --yes'
+
