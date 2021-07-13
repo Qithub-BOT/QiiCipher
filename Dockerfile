@@ -19,6 +19,7 @@ FROM alpine:latest AS testbuild
 RUN apk add --no-cache \
     openssl \
     openssh \
+    coreutils \
     ca-certificates && update-ca-certificates
 
 # Install requirements for testing
@@ -47,6 +48,7 @@ FROM alpine
 RUN apk add --no-cache \
     openssl \
     openssh \
+    coreutils \
     ca-certificates && update-ca-certificates
 
 COPY --from=testbuild /app/bin /usr/local/sbin
