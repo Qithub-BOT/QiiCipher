@@ -8,6 +8,8 @@ PATH_DIR_ROOT_REPO="$(dirname "$(cd "$(dirname "$0")" && pwd)")"
 PATH_FILE_WELCOME="${PATH_DIR_ROOT_REPO}/.devcontainer/welcome_msg.sh"
 PATH_FILE_LINT="${PATH_DIR_ROOT_REPO}/.github/run-lint.sh"
 PATH_FILE_TEST="${PATH_DIR_ROOT_REPO}/.github/run-test.sh"
+PATH_FILE_UPDATE_HASH="${PATH_DIR_ROOT_REPO}/.github/update-checksum.sh"
+PATH_FILE_VERIFY_HASH="${PATH_DIR_ROOT_REPO}/.github/verify-checksum.sh"
 
 # カレント・ユーザの .bashrc に追記
 {
@@ -15,6 +17,8 @@ PATH_FILE_TEST="${PATH_DIR_ROOT_REPO}/.github/run-test.sh"
     echo "alias welcome='${PATH_FILE_WELCOME}'"
     echo "alias run-lint='${PATH_FILE_LINT}'"
     echo "alias run-test='${PATH_FILE_TEST}'"
+    echo "alias update-checksum='${PATH_FILE_UPDATE_HASH}'"
+    echo "alias verify-checksum='${PATH_FILE_VERIFY_HASH}'"
 
     # ウェルカム・メッセージの表示
     echo "$PATH_FILE_WELCOME"
