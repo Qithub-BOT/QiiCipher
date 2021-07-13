@@ -145,7 +145,7 @@ cd "$PATH_DIR_BIN" || {
     exit $FAILURE
 }
 
-result=$(sha512sum --check "$PATH_FILE_CHECKSUM") || {
+result=$(sha512sum -c "$PATH_FILE_CHECKSUM") || {
     echo >&2 "$result"
     echo >&2 "Filed to verify checksum."
 

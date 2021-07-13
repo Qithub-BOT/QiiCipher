@@ -64,7 +64,7 @@ appendChecksum() {
 }
 
 verifyChecksum() {
-    result=$(sha512sum --check "$PATH_FILE_CHECKSUM") || {
+    result=$(sha512sum -c "$PATH_FILE_CHECKSUM") || {
         echo >&2 "$result"
 
         return $FAILURE
