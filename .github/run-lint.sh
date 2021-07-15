@@ -6,11 +6,14 @@
 # -----------------------------------------------------------------------------
 #  Constants
 # -----------------------------------------------------------------------------
+SUCCESS=0
+FAILURE=1
+NAME_FILE_CHECKSUM='checksum.sha512'
+
 PATH_DIR_REPO="$(dirname "$(cd "$(dirname "$0")" && pwd)")"
 PATH_DIR_BIN="${PATH_DIR_REPO}/bin"
 PATH_DIR_RETURN="$(cd . && pwd)"
-SUCCESS=0
-FAILURE=1
+PATH_FILE_CHECKSUM="${PATH_DIR_BIN}/${NAME_FILE_CHECKSUM}"
 
 # 拡張子のないスクリプトファイル一覧（テスト対象リスト）
 LIST_SCRIPT_NO_EXT="archive check dec enc keygen sign verify checkkeylength dearchive"
@@ -122,6 +125,7 @@ cd "$PATH_DIR_REPO" || {
 
     exit $FAILURE
 }
+trap 'cd "$PATH_DIR_RETURN"' 0
 
 echo '-------------------------------------------------------------------------------'
 echo ' Running linters'
@@ -129,8 +133,22 @@ echo '--------------------------------------------------------------------------
 runShfmt
 runShellCheck
 
-cd "$PATH_DIR_RETURN" || {
-    echo >&2 "Failed to change dir to: ${PATH_DIR_RETURN}"
+echo '-------------------------------------------------------------------------------'
+echo ' Verifying Checksum File'
+echo '-------------------------------------------------------------------------------'
+
+printf "%s" '- Checksum ... '
+
+cd "$PATH_DIR_BIN" || {
+    echo >&2 "Failed to change dir to: ${PATH_DIR_BIN}"
 
     exit $FAILURE
 }
+
+result=$(sha512sum -c "$PATH_FILE_CHECKSUM") || {
+    echo >&2 "$result"
+    echo >&2 "Filed to verify checksum."
+
+    exit $FAILURE
+}
+echo 'OK'

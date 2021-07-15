@@ -21,10 +21,13 @@ cat <<HEREDOC
     Alt + Shift + F
 - このメッセージの再表示
     $ welcome
+- チェックサムファイルの更新
+    $ update-checksum
 - テストの実行
-  - 構文チェック/Lint の実行 ... shfmt, shellcheck が実行されます
-      $ run-lint
-  - ユニットテストの実行 ... shellspec が実行されます
-      $ run-test
-
+  構文チェック/Lint の実行 ... shfmt, shellcheck が実行されます
+    $ run-lint
+  ユニットテストの実行 ... shellspec が実行されます
+    $ run-test
+  チェックサムファイルのハッシュ値確認
+    $ verify-checksum
 HEREDOC
