@@ -13,5 +13,8 @@ USER vscode
 
 RUN \
         # ShellSpec のインストール
-        sh -c 'wget -O- https://git.io/shellspec | sh -s -- --yes'
-
+        sh -c 'wget -O- https://git.io/shellspec | sh -s -- --yes' \
+        # OlioSource のインストール (shellcheck と同じ先)
+        && sudo wget https://git.io/oliosource \
+        && sudo chmod +x ./oliosource \
+        && sudo mv ./oliosource "$(dirname "$(which shellcheck)")"
